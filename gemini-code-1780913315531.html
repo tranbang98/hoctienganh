@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Luyện Đáp Án Tiếng Anh PET/FCE</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f7;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Hệ thống Tabs điều hướng quyển */
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 15px;
+            border: none;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background-color: #dfe6e9;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+        }
+
+        /* Thanh điều khiển phụ trách Trộn đề */
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .book-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-shuffle {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-shuffle:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .btn-next-book {
+            background-color: #9b59b6;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+            margin: 30px auto 10px auto;
+            display: none; /* Ẩn mặc định, chỉ hiện khi hoàn thành 100% */
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+            animation: bounce 2s infinite;
+        }
+
+        .btn-next-book:hover {
+            background-color: #8e44ad;
+        }
+
+        /* Danh sách câu hỏi */
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: var(--light-color);
+            border: 2px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            position: relative;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateX(5px);
+        }
+
+        /* Trạng thái Màu sắc Đúng/Sai phản hồi trực quan */
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--error-color) !important;
+            color: #721c24 !important;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        /* Trạng thái tiến độ thực hiện */
+        .progress-bar-container {
+            background: #dee2e6;
+            border-radius: 50px;
+            height: 10px;
+            width: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--success-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 600px) {
+            .tabs-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .control-panel {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HỆ THỐNG LUYỆN ĐÁP ÁN PET/FCE</h1>
+    <p>Học thông minh - Chống vẹt - Thuộc 100% mới được qua Quyển</p>
+    <div class="container" style="margin-top: 15px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:5px;">
+            <span>Tiến độ hoàn thành Quyển hiện tại:</span>
+            <span id="progress-text">0/0 ĐÚNG</span>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="tabs-container" id="tabs-box"></div>
+
+    <div class="control-panel">
+        <div class="book-title" id="current-book-title">Quyển Extra</div>
+        <button class="btn btn-shuffle" onclick="shuffleCurrentBook()">🎲 Trộn câu hỏi & Đáp án</button>
+    </div>
+
+    <div class="quiz-container" id="quiz-box"></div>
+
+    <div style="text-align: center; width: 100%;">
+        <button class="btn btn-next-book" id="btn-next" onclick="goToNextBook()">🚀 Tuyệt vời! Check chuyển sang Quyển tiếp theo</button>
+    </div>
+</div>
+
+<script>
+// Toàn bộ kho dữ liệu đã được bóc tách sạch sẽ và chuẩn hóa cấu trúc
+const rawData = {
+    "Quyển Extra": [
+        { "q": "What is the woman first memory?", "a": "Father took her to the seaside" },
+        { "q": "What is the woman second memory?", "a": "10:15" },
+        { "q": "What is the woman third memory?", "a": "Hat, drinking water and a board" },
+        { "q": "What is the woman fourth memory?", "a": "A picnic to the castle" },
+        { "q": "What is the woman fifth memory?", "a": "Milk, bread and apples" },
+        { "q": "What will the weather be like tomorrow?", "a": "Sunshine and showers" },
+        { "q": "What will the second activity be tomorrow?", "a": "Make a call ( ring to a friend)" },
+        { "q": "What will the third item be tomorrow?", "a": "With oranges" },
+        { "q": "What will the fourth event be tomorrow?", "a": "Fell off her bike and a boy picked her book up for her" },
+        { "q": "What will the fifth person be like tomorrow?", "a": "Young man with sunglasses and blond hair" },
+        { "q": "Which present will the girl take? (1)", "a": "Scarf" },
+        { "q": "Which present will the girl take? (2)", "a": "Grand mother, parents and Joe" },
+        { "q": "Which present will the girl take? (3)", "a": "The Cotton seeds: drummer, guitarist and drummer’s sister" },
+        { "q": "Which present will the girl take? (4)", "a": "In the Manager’s drawer" },
+        { "q": "Which present will the girl take? (5)", "a": "5:20" },
+        { "q": "Which present has the girl bought her mother? (1)", "a": "A silver pen" },
+        { "q": "Which present has the girl bought her mother? (2)", "a": "Book about painting" },
+        { "q": "Which present has the girl bought her mother? (3)", "a": "The one in the Park (forest)" },
+        { "q": "Which present has the girl bought her mother? (4)", "a": "Small money, fruit and colour pencils" },
+        { "q": "Which present has the girl bought her mother? (5)", "a": "Maths" }
+    ],
+    "Quyển 1": [
+        { "q": "Which dish did Mark cook in the competition?", "a": "Vegetain" },
+        { "q": "Where was the second item in the competition?", "a": "In the desk’s drawer" },
+        { "q": "Who came to the competition?", "a": "His Grandmother, dad and mum" },
+        { "q": "What was the fourth item in the competition?", "a": "Sport bag" },
+        { "q": "What time did the competition end?", "a": "11: 50" },
+        { "q": "What can’t the woman find? (1)", "a": "Pain brush" },
+        { "q": "What can’t the woman find? (2)", "a": "Sunny and rainy" },
+        { "q": "What can’t the woman find? (3)", "a": "Orange juice and bread" },
+        { "q": "What can’t the woman find? (4)", "a": "Gold colored pen" },
+        { "q": "What can’t the woman find? (5)", "a": "Backetball match." },
+        { "q": "Which T-shirt does the boy decide to buy? (1)", "a": "T shirt with round neck and short sleeve" },
+        { "q": "Which T-shirt does the boy decide to buy? (2)", "a": "The drummer guiterist and singer" },
+        { "q": "Which T-shirt does the boy decide to buy? (3)", "a": "Twenty past five (5.20)" },
+        { "q": "Which T-shirt does the boy decide to buy? (4)", "a": "The girl wearing a dress" },
+        { "q": "Which T-shirt does the boy decide to buy? (5)", "a": "Change ( cent), fruit, colourred pencils" },
+        { "q": "When will Jack’s mum pick him up?", "a": "Six o’clock (6g)" },
+        { "q": "What is the second picture about?", "a": "Picture of the lake and village" },
+        { "q": "What is the third item?", "a": "Biscuits" },
+        { "q": "What is the fourth item?", "a": "Pen" },
+        { "q": "What is the fifth item?", "a": "Cary ladder" }
+    ],
+    "Quyển 2": [
+        { "q": "Where will the girls meet ?", "a": "Ice cream kiosk" },
+        { "q": "What type of chair is it?", "a": "High back and arms" },
+        { "q": "What are the ingredients?", "a": "Flour, butter, a lemon, milk, two eggs" },
+        { "q": "What was broken?", "a": "Broken window" },
+        { "q": "What are they doing?", "a": "Washing dishes" },
+        { "q": "When and where are they meeting?", "a": "7: 00 Outside the restaurant" },
+        { "q": "What is the second item?", "a": "Book" },
+        { "q": "What does the man look like?", "a": "Bald with mustache" },
+        { "q": "Where is the hidden item?", "a": "Behind the garage" },
+        { "q": "What fruit do they have?", "a": "Bananas" },
+        { "q": "Where is the station?", "a": "On the second right and the end of the road" },
+        { "q": "Where are the books?", "a": "On the pile of books" },
+        { "q": "Who is the person standing next to?", "a": "Next to the man in shorts" },
+        { "q": "Where is the factory?", "a": "The factory near the church" },
+        { "q": "What kind of shoes?", "a": "Flat shoes" },
+        { "q": "Where are the woman’s glasses?", "a": "She is wearing" },
+        { "q": "What is on the side?", "a": "Paint all over the side" },
+        { "q": "What items are in the bathroom?", "a": "Soap, towel, toothbrush" },
+        { "q": "What is she wearing?", "a": "T- shirt and a pair of jeans" },
+        { "q": "Where is the final location?", "a": "Station" }
+    ],
+    "Quyển 3": [
+        { "q": "What was in the woman’s bag?", "a": "Purse and keys" },
+        { "q": "What is the girl doing?", "a": "The girl is standing watching the sunset" },
+        { "q": "What should they do with clothes?", "a": "Put clothes" },
+        { "q": "What sport will they do?", "a": "Go sailing" },
+        { "q": "How do they travel?", "a": "By car" },
+        { "q": "How did the film end?", "a": "The man gets caught" },
+        { "q": "What time is it? (Q3)", "a": "Twenty five past three (3:25)" },
+        { "q": "What object is mentioned?", "a": "Plate" },
+        { "q": "Where is the rubbish placed?", "a": "By the door with the other rubbish" },
+        { "q": "What vegetables are needed?", "a": "Red pepper and carrots" },
+        { "q": "How did the woman get to work today?", "a": "Having a lift" },
+        { "q": "Where are they going?", "a": "Forest" },
+        { "q": "What time is the event?", "a": "12:50" },
+        { "q": "What fruits did they buy?", "a": "Grapes and bananas" },
+        { "q": "What item is on the table?", "a": "Book" },
+        { "q": "What time will the flight leave?", "a": "11.35" },
+        { "q": "What does the man look like? (Q3)", "a": "A lot of hair, no glasses" },
+        { "q": "What dress is she wearing?", "a": "dress with short sleeves open neck" },
+        { "q": "Where is the seat located?", "a": "After the middle row, one side" },
+        { "q": "Where to put the food?", "a": "Put them oven" }
+    ],
+    "Quyển 4": [
+        { "q": "Which activity will the family do this year?", "a": "Cycling" },
+        { "q": "What does the house look like?", "a": "the house has a big tree with flowers by the front gate." },
+        { "q": "What is causing the delay?", "a": "The repair of the bridge" },
+        { "q": "What was she doing?", "a": "Was on the phone" },
+        { "q": "What time does it start?", "a": "Half past six (6:30)" },
+        { "q": "How much is the man’s ticket?", "a": "$15.00" },
+        { "q": "What are they eating?", "a": "Chips and Sausages" },
+        { "q": "What caused the traffic?", "a": "Lorry accident" },
+        { "q": "How is the weather?", "a": "Cloudy" },
+        { "q": "What time is it? (Q4)", "a": "Ten past ten (10.10)" },
+        { "q": "What is the man going to buy?", "a": "Medicine ( Pills)" },
+        { "q": "Which dress did she choose?", "a": "the dress with the collar and button." },
+        { "q": "What time is the meeting?", "a": "8:45" },
+        { "q": "What is their favorite sport?", "a": "Swimming" },
+        { "q": "Which painting do they prefer?", "a": "The painting with the boats" },
+        { "q": "Where will the woman go first after work?", "a": "The Market" },
+        { "q": "What is on exhibition?", "a": "Paintings" },
+        { "q": "What toy did he buy?", "a": "Model taxi" },
+        { "q": "What time does the store open?", "a": "9: 30" },
+        { "q": "Where are the keys?", "a": "under the cushion." }
+    ],
+    "Quyển 5": [
+        { "q": "What was damaged in the storm?", "a": "The window" },
+        { "q": "What sweets do they like?", "a": "Chocolate" },
+        { "q": "Which option do they choose?", "a": "both" },
+        { "q": "What activity are they doing?", "a": "Wind surfing" },
+        { "q": "Where is he going?", "a": "go to library." },
+        { "q": "Which sport will the woman learn on holiday?", "a": "Wind surfing" },
+        { "q": "What does the haircut look like?", "a": "Short hair" },
+        { "q": "What animals did they see?", "a": "Birds, horses, monkeys" },
+        { "q": "What are they listening to?", "a": "music in concert" },
+        { "q": "What are the items stored in?", "a": "Wooden boxes" },
+        { "q": "What is the weather forecast for tomorrow?", "a": "Rainy" },
+        { "q": "What snack do they have?", "a": "Biscuits" },
+        { "q": "What T-shirt is he looking for?", "a": "With short sleeves, round neck" },
+        { "q": "What is she carrying?", "a": "A backpack" },
+        { "q": "What is the correct posture?", "a": "The kness are bent at 90 degress; The arms are straight in front of the body." },
+        { "q": "Which of Miranda’s things will Lucy be able to use?", "a": "balls" },
+        { "q": "What tool is needed?", "a": "Hammer" },
+        { "q": "What does the design look like?", "a": "Square stone with lot of smaller stones round it" },
+        { "q": "What time is it? (Q5)", "a": "Quarter to seven (6.45)" },
+        { "q": "What event are they watching?", "a": "Football match" }
+    ],
+    "Quyển 6": [
+        { "q": "Where will the friends meet?", "a": "coffee bar" },
+        { "q": "What is he writing with?", "a": "Pen" },
+        { "q": "What class are they taking?", "a": "cooking (Tim Wong’s Chinese cooking)" },
+        { "q": "What device is ringing?", "a": "phone" },
+        { "q": "What is his profession?", "a": "gardener" },
+        { "q": "Where are the dictionaries?", "a": "behind the computer" },
+        { "q": "What is she wearing? (Q6)", "a": "long dress with wide belt" },
+        { "q": "Who is speaking?", "a": "teacher" },
+        { "q": "What is hanging on the wall?", "a": "Calendar with picture of boat" },
+        { "q": "What time is the shift?", "a": "2g15" },
+        { "q": "What regular exercise?", "a": "swimming" },
+        { "q": "What tools do they need?", "a": "Scissors and brush" },
+        { "q": "Which shirt did he buy?", "a": "T shirt with shapes" },
+        { "q": "What equipment is missing?", "a": "bat" },
+        { "q": "Where is the meeting held?", "a": "Client’s house" },
+        { "q": "What did the thieves steal?", "a": "antique chest of drawers" },
+        { "q": "What is on the tray?", "a": "glasses with jug" },
+        { "q": "What are they eating for lunch?", "a": "sandwiches" },
+        { "q": "What time does the train arrive?", "a": "10.45" },
+        { "q": "Who found the missing item?", "a": "teacher" }
+    ],
+    "Quyển 7": [
+        { "q": "How will they book their flight?", "a": "travel agent" },
+        { "q": "What is inside the bottle?", "a": "shampoo" },
+        { "q": "Where are they going for vacation?", "a": "going to beach" },
+        { "q": "What shirt style is it?", "a": "long sleeves with collar" },
+        { "q": "What number is mentioned?", "a": "13" },
+        { "q": "What has the boy lost?", "a": "a camera" },
+        { "q": "What time does the show start?", "a": "2.30" },
+        { "q": "What instrument is he playing?", "a": "the drum" },
+        { "q": "How will the weather be?", "a": "it will be rainy" },
+        { "q": "Which book are they using?", "a": "computer for beginners" },
+        { "q": "Which present will the girl receive?", "a": "a carpet" },
+        { "q": "Where is the location?", "a": "a river" },
+        { "q": "What time is on the ticket?", "a": "18.50" },
+        { "q": "Where did they find the bag?", "a": "under a seat" },
+        { "q": "Which pattern do they choose?", "a": "the one with the spots" },
+        { "q": "Which prize has the man just won?", "a": "bowl" },
+        { "q": "What is his job today?", "a": "cleaning window" },
+        { "q": "Where are they stopping?", "a": "service station" },
+        { "q": "What is the advantage of the new place?", "a": "more rooms to park" },
+        { "q": "What hobby do they share?", "a": "Riding" }
+    ],
+    "Quyển 8": [
+        { "q": "What did the man buy?", "a": "A sweater" },
+        { "q": "What are they doing? (Q8)", "a": "Choosing some dishes" },
+        { "q": "What is inside the gift box?", "a": "Box of chocolate" },
+        { "q": "What is she looking to buy?", "a": "jewelry" },
+        { "q": "Where is the trash located?", "a": "Near the dustbin" },
+        { "q": "Which part of the Art center?", "a": "Open air concert" },
+        { "q": "What is needed to pay?", "a": "Money" },
+        { "q": "Where does it hurt?", "a": "Knee" },
+        { "q": "Where is he heading to?", "a": "The air port" },
+        { "q": "What vegetable is missing?", "a": "onion" },
+        { "q": "How are they going to get the cafe?", "a": "walk through the park ( on foot)" },
+        { "q": "What instrument is on the table?", "a": "key board" },
+        { "q": "What time is the meeting? (Q8)", "a": "6.30" },
+        { "q": "What did they order?", "a": "A coffee and a chocolate cake" },
+        { "q": "What instrument are they playing?", "a": "guitar" },
+        { "q": "Where will Peter give Joana the book?", "a": "at the cafe" },
+        { "q": "What clothing item is it?", "a": "blouse" },
+        { "q": "How is the weather outside?", "a": "Snowy" },
+        { "q": "Where are they training?", "a": "Sport center" },
+        { "q": "What are they talking about?", "a": "The story" }
+    ]
+};
+
+// Gom toàn bộ đáp án của hệ thống để làm kho lấy đáp án nhiễu (Dữ liệu lớn)
+let allAnswersPool = [];
+for (let book in rawData) {
+    rawData[book].forEach(item => {
+        if (!allAnswersPool.includes(item.a)) {
+            allAnswersPool.push(item.a);
+        }
+    });
+}
+
+const bookKeys = Object.keys(rawData);
+let currentBookIndex = 0;
+let currentQuestions = [];
+let userScoreMap = {}; // Lưu trữ trạng thái đúng của từng câu hỏi trong quyển hiện tại
+
+// Khởi chạy ứng dụng
+document.addEventListener("DOMContentLoaded", () => {
+    renderTabs();
+    loadBook(bookKeys[0]);
+});
+
+// Tạo thanh Tab các Quyển học
+function renderTabs() {
+    const tabsBox = document.getElementById("tabs-box");
+    tabsBox.innerHTML = "";
+    bookKeys.forEach((bookName, index) => {
+        const btn = document.createElement("button");
+        btn.className = `tab-btn ${index === currentBookIndex ? 'active' : ''}`;
+        btn.innerText = bookName;
+        btn.onclick = () => {
+            currentBookIndex = index;
+            loadBook(bookName);
+        };
+        tabsBox.appendChild(btn);
+    });
+}
+
+// Tải dữ liệu của Quyển được chọn
+function loadBook(bookName) {
+    document.getElementById("current-book-title").innerText = bookName;
+    
+    // Đồng bộ lại Class Active của các nút Tab
+    const tabs = document.querySelectorAll(".tab-btn");
+    tabs.forEach((tab, idx) => {
+        if (idx === currentBookIndex) tab.classList.add("active");
+        else tab.classList.remove("active");
+    });
+
+    // Bản sao dữ liệu gốc để tránh đột biến cấu trúc gốc khi xáo trộn
+    currentQuestions = JSON.parse(JSON.stringify(rawData[bookName]));
+    
+    // Khởi tạo bảng điểm của quyển này
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+}
+
+// Thuật toán sinh 3 đáp án nhiễu thông minh (A, B, C, D) không trùng lặp
+function generateOptions(correctAnswer) {
+    if (correctAnswer.toLowerCase() === "correct" || correctAnswer.toLowerCase() === "incorrect") {
+        return ["Correct", "Incorrect"];
+    }
+
+    let options = [correctAnswer];
+    // Lọc kho đáp án nhiễu loại trừ đáp án đúng hiện tại
+    let filteredPool = allAnswersPool.filter(ans => ans.toLowerCase() !== correctAnswer.toLowerCase());
+    
+    // Xáo trộn kho lọc để lấy ngẫu nhiên 3 đáp án khác
+    filteredPool.sort(() => Math.random() - 0.5);
+    
+    for (let i = 0; i < Math.min(3, filteredPool.length); i++) {
+        options.push(filteredPool[i]);
+    }
+
+    // Xáo trộn vị trí của 4 đáp án này để chống học vẹt vị trí nút
+    return options.sort(() => Math.random() - 0.5);
+}
+
+// Render danh sách câu hỏi ra giao diện trực quan
+function renderQuestions() {
+    const quizBox = document.getElementById("quiz-box");
+    quizBox.innerHTML = "";
+
+    currentQuestions.forEach((qObj, qIndex) => {
+        // Nếu câu hỏi chưa có sẵn danh sách đáp án được trộn riêng (Ví dụ khi mới load hoặc sau khi bấm Trộn)
+        if (!qObj.generatedOptions) {
+            qObj.generatedOptions = generateOptions(qObj.a);
+        }
+
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.id = `q-card-${qIndex}`;
+
+        const qText = document.createElement("div");
+        qText.className = "question-text";
+        qText.innerText = `Câu ${qIndex + 1}: ${qObj.q}`;
+        card.appendChild(qText);
+
+        const optionsGrid = document.createElement("div");
+        optionsGrid.className = "options-grid";
+
+        qObj.generatedOptions.forEach(optionText => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = optionText;
+            
+            // Xử lý sự kiện bấm chọn đáp án
+            btn.onclick = () => checkAnswer(btn, optionText, qObj.a, qIndex, optionsGrid);
+            optionsGrid.appendChild(btn);
+        });
+
+        card.appendChild(optionsGrid);
+        quizBox.appendChild(card);
+    });
+}
+
+// Xử lý Logic kiểm tra đáp án và Phản hồi màu sắc trực quan (Đỏ/Xanh)
+function checkAnswer(selectedBtn, selectedText, correctAnswer, qIndex, optionsGrid) {
+    const allButtons = optionsGrid.querySelectorAll(".option-btn");
+    
+    // Vô hiệu hóa tất cả các nút trong câu hỏi này để không cho bấm lại
+    allButtons.forEach(btn => btn.disabled = true);
+
+    if (selectedText === correctAnswer) {
+        // ĐÚNG: Ô chuyển màu XANH LÁ
+        selectedBtn.classList.add("correct");
+        userScoreMap[qIndex] = true;
+    } else {
+        // SAI: Ô bấm chuyển màu ĐỎ
+        selectedBtn.classList.add("wrong");
+        userScoreMap[qIndex] = false;
+        
+        // Đồng thời tìm và tự động sáng màu XANH LÁ đáp án đúng để đối chiếu
+        allButtons.forEach(btn => {
+            if (btn.innerText === correctAnswer) {
+                btn.classList.add("correct");
+            }
+        });
+    }
+
+    updateProgressBar();
+}
+
+// Cập nhật thanh tiến độ thực tế & Mở khóa chuyển quyển nghiêm ngặt
+function updateProgressBar() {
+    const total = currentQuestions.length;
+    if (total === 0) return;
+
+    const correctCount = Object.values(userScoreMap).filter(val => val === true).length;
+    const percentage = (correctCount / total) * 100;
+
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+    const btnNext = document.getElementById("btn-next");
+
+    progressBar.style.width = `${percentage}%`;
+    progressText.innerText = `${correctCount}/${total} ĐÚNG`;
+
+    // Khóa trang nghiêm ngặt: Chỉ hiện nút Chuyển quyển khi thuộc lòng chính xác 100%
+    if (correctCount === total) {
+        btnNext.style.display = "block";
+    } else {
+        btnNext.style.display = "none";
+    }
+}
+
+// Tính năng Trộn câu hỏi (🎲): Xáo trộn đề và đảo luôn đáp án
+function shuffleCurrentBook() {
+    // Xáo trộn mảng câu hỏi hiện tại
+    currentQuestions.sort(() => Math.random() - 0.5);
+    
+    // Tạo lại bộ đáp án trộn hoàn toàn mới cho từng câu hỏi
+    currentQuestions.forEach(qObj => {
+        qObj.generatedOptions = generateOptions(qObj.a);
+    });
+
+    // Reset lại điểm số câu trả lời của quyển này để kiểm tra lại từ đầu
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+    
+    // Cuộn mượt lên đầu trang sau khi trộn đề thành công
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Chuyển sang quyển tiếp theo theo thứ tự tuyến tính
+function goToNextBook() {
+    if (currentBookIndex < bookKeys.length - 1) {
+        currentBookIndex++;
+        loadBook(bookKeys[currentBookIndex]);
+        // Tự động cuộn mượt lên đầu trang mới
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        alert("Chúc mừng bạn! Bạn đã xuất sắc hoàn thành tất cả các quyển bài tập PET/FCE!");
+    }
+}
+</script>
+
+</body>
+</html>
