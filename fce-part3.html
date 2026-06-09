@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Luyện Đáp Án FCE - Part 3 (Q21-Q30)</title>
+    <style>
+        :root {
+            --primary-color: #2980b9;
+            --accent-color: #8e44ad;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f7;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2980b9, #8e44ad);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-back {
+            margin-bottom: 15px;
+        }
+
+        .nav-back a {
+            text-decoration: none;
+            color: #7f8c8d;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 15px;
+            border: none;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background-color: #dfe6e9;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-shuffle {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-shuffle:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .btn-next-book {
+            background-color: #2ecc71;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+            margin: 30px auto 10px auto;
+            display: none;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .options-grid.binary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--light-color);
+            border: 2px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .options-grid.binary .option-btn {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--error-color) !important;
+            color: #721c24 !important;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .progress-bar-container {
+            background: #dee2e6;
+            border-radius: 50px;
+            height: 10px;
+            width: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--success-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        @media (max-width: 600px) {
+            .tabs-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HỆ THỐNG LUYỆN ĐÁP ÁN FCE - PART 2 & 3</h1>
+    <p>Kho bài tập nâng cao từ Câu 21 đến Câu 30 - Thử thách phản xạ thông minh</p>
+    <div class="container" style="margin-top: 15px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:5px;">
+            <span>Tiến độ hoàn thành:</span>
+            <span id="progress-text">0/0 ĐÚNG</span>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="nav-back">
+        <a href="index.html">⬅ Quay lại Trang chủ</a>
+    </div>
+
+    <div class="tabs-container" id="tabs-box"></div>
+
+    <div class="control-panel">
+        <div class="book-title" id="current-book-title">FCE Test Plus 1</div>
+        <button class="btn btn-shuffle" onclick="shuffleCurrentBook()">🎲 Trộn câu hỏi</button>
+    </div>
+
+    <div class="quiz-container" id="quiz-box"></div>
+
+    <div style="text-align: center; width: 100%;">
+        <button class="btn btn-next-book" id="btn-next" onclick="goToNextBook()">🚀 Tuyệt vời! Chuyển sang phần tiếp theo</button>
+    </div>
+</div>
+
+<script>
+const rawData = {
+    "FCE Test Plus 1 (P1)": [
+        { "num": 24, "q": "What reason does Simon give to not going into acting straight from school?", "a": "He was not brave enough", "type": "mcq" },
+        { "num": 25, "q": "How does Simon feel now about the careers advice he was given?", "a": "He is grateful for the opportunity it gave him", "type": "mcq" },
+        { "num": 26, "q": "What led Simon to give up accountancy?", "a": "He had developed other interests", "type": "mcq" },
+        { "num": 27, "q": "Why did Simon take up ‘busking’?", "a": "to support himself while he studied", "type": "mcq" },
+        { "num": 28, "q": "How did Simon’s grandmother influence him?", "a": "She had been involved in the theatre", "type": "mcq" },
+        { "num": 29, "q": "According to Simon, people who are shy", "a": "really want to be accepted", "type": "mcq" },
+        { "num": 30, "q": "Simon thinks that it is better for actors if they", "a": "can indentify with the characters they play", "type": "mcq" },
+        { "num": 24, "q": "Test 2: Ricky's songs are about the lives of famous people", "a": "F", "type": "tf" },
+        { "num": 25, "q": "Test 2: The message in Ricky's songs is difficult to understand", "a": "T", "type": "tf" },
+        { "num": 26, "q": "Test 2: Ricky's popularity is on the increase", "a": "F", "type": "tf" },
+        { "num": 27, "q": "Test 2: Money is unimportant to Ricky", "a": "T", "type": "tf" },
+        { "num": 28, "q": "Test 2: Ricky has followed the advice of some of his fans.", "a": "T", "type": "tf" },
+        { "num": 29, "q": "Test 2: Ricky thinks his fans are disappointed when they meet him.", "a": "T", "type": "tf" },
+        { "num": 30, "q": "Test 2: Ricky is anxious about his new album.", "a": "F", "type": "tf" }
+    ],
+    "FCE Test Plus 1 (P2)": [
+        { "num": 24, "q": "Test 4: Jack got a role in the soap opera because", "a": "A TV star had just resigned", "type": "mcq" },
+        { "num": 25, "q": "Test 4: Jack finds the most difficult part of his job is", "a": "remembering his lines", "type": "mcq" },
+        { "num": 26, "q": "Test 4: How does Jack avoid the bad effects of fame ?", "a": "The follows his mother’s advice", "type": "mcq" },
+        { "num": 27, "q": "Test 4: What does Jack say about the clothes he wears ?", "a": "They are expensive", "type": "mcq" },
+        { "num": 28, "q": "Test 4: What does Jack value most in his friends", "a": "They help him to relax", "type": "mcq" },
+        { "num": 29, "q": "Test 4: What is Jack’s reason for not going to the gym", "a": "He is too busy", "type": "mcq" },
+        { "num": 30, "q": "Test 4: Jack’s dream for the future is", "a": "To win a TV priz", "type": "mcq" },
+        { "num": 24, "q": "Test 5: Ella thinks travelling is an unpleasant part of her job.", "a": "T", "type": "tf" },
+        { "num": 25, "q": "Test 5: Ella’s problems are often caused by insensitive aditors.", "a": "F", "type": "tf" },
+        { "num": 26, "q": "Test 5: In Mauritius, Ella had no time to take all the planned photos.", "a": "F", "type": "tf" },
+        { "num": 27, "q": "Test 5: A problem at the airport prevented the plane from landing at Nairobi.", "a": "T", "type": "tf" },
+        { "num": 28, "q": "Test 5: After the landing in Uganda some of the luggage was lost.", "a": "F", "type": "tf" },
+        { "num": 29, "q": "Test 5: The experience at Nairobi made Ella change some of her opinions.", "a": "T", "type": "tf" },
+        { "num": 30, "q": "Test 5: At present, Ella is thinking about whether to change jobs.", "a": "T", "type": "tf" }
+    ],
+    "FCE Test Plus 1 (P3)": [
+        { "num": 24, "q": "Test 6: I generally prefer not to travel abroad on holiday.", "a": "A", "type": "ab" },
+        { "num": 25, "q": "Test 6: My recent holiday came at an inconvenient moment.", "a": "B", "type": "ab" },
+        { "num": 26, "q": "Test 6: I once went on a free holiday came as a result of my job.", "a": "A", "type": "ab" },
+        { "num": 27, "q": "Test 6: On holiday, I prefer to choose the activities I take part in.", "a": "A", "type": "ab" },
+        { "num": 28, "q": "Test 6: Sitting on a beach is enjoyable if you go well-prepared.", "a": "B", "type": "ab" },
+        { "num": 29, "q": "Test 6: I begin to fell restless if sit alone in the sun for too long.", "a": "A", "type": "ab" },
+        { "num": 30, "q": "Test 6: If I have a good book to read, I don’t mind where I sit.", "a": "B", "type": "ab" },
+        { "num": 21, "q": "Test 7: What reason did one firm of publisers give for not accepting Dominic’s first book?", "a": "its length", "type": "mcq" },
+        { "num": 22, "q": "Test 7: Dominic wanted the character in his books", "a": "to change as the story developed", "type": "mcq" },
+        { "num": 23, "q": "Test 7: What happen when Dominic writes a good series of books?", "a": "reader want more of the same", "type": "mcq" },
+        { "num": 24, "q": "Test 7: what is Dominic’s ambition at the moment?", "a": "to get more people to read his novels", "type": "mcq" },
+        { "num": 25, "q": "Test 7: Dominic says that he accepted a film offer because", "a": "he was too proud to reject it", "type": "mcq" },
+        { "num": 26, "q": "Test 7: As a young child Dominic enjoyed reading", "a": "books about history", "type": "mcq" },
+        { "num": 27, "q": "Test 7: What does Dominic say reader should do before buying a book?", "a": "read a small section of it", "type": "mcq" }
+    ],
+    "Nghe FCE Quyển 1": [
+        { "num": 24, "q": "Test 1 (Trina Trevose): When Trina went to the USA, she?", "a": "didn’t tell many people why she was going.", "type": "mcq" },
+        { "num": 25, "q": "Test 1 (Trina Trevose): When Trina was in the USA, she wrote songs about?", "a": "people she met.", "type": "mcq" },
+        { "num": 26, "q": "Test 1 (Trina Trevose): Where was Trina performing when she was noticed by the record company?", "a": "near her home.", "type": "mcq" },
+        { "num": 27, "q": "Test 1 (Trina Trevose): Why did Trina sing with David Pearson?", "a": "He needed some help.", "type": "mcq" },
+        { "num": 28, "q": "Test 1 (Trina Trevose): Trina was asked to return to the USA to?", "a": "re-do some work.", "type": "mcq" },
+        { "num": 29, "q": "Test 1 (Trina Trevose): Why isn’t Trina popular in Britain?", "a": "Her records haven’t been available in Britain.", "type": "mcq" },
+        { "num": 30, "q": "Test 1 (Trina Trevose): How does Trina see her future?", "a": "She may make singing her career eventually.", "type": "mcq" },
+        { "num": 24, "q": "Test 2 (Tricia Simpkins): How did Tricia once feel about the countryside?", "a": "She paid no attention to it.", "type": "mcq" },
+        { "num": 25, "q": "Test 2 (Tricia Simpkins): Why did Tricia take part in a wildlife survey?", "a": "She was required to do it.", "type": "mcq" },
+        { "num": 26, "q": "Test 2 (Tricia Simpkins): What does Tricia say about the results of the survey?", "a": "They were unexpected", "type": "mcq" },
+        { "num": 27, "q": "Test 2 (Tricia Simpkins): What does Tricia say about the problems created by trees?", "a": "People exaggerate them.", "type": "mcq" },
+        { "num": 28, "q": "Test 2 (Tricia Simpkins): According to Tricia, what is wrong with the trees the council is planting?", "a": "They fail to attract wildlife", "type": "mcq" },
+        { "num": 29, "q": "Test 2 (Tricia Simpkins): What used to happen in the wasteland at the end of Tricia’s street ?", "a": "Children used to play there", "type": "mcq" },
+        { "num": 30, "q": "Test 2 (Tricia Simpkins): What is Tricia’s suggestion for the new nature reserve?", "a": "To let it go wild.", "type": "mcq" }
+    ],
+    "Nghe FCE Quyển 2 & 3": [
+        { "num": 24, "q": "Quyển 2 - Test 1: What does Alan say about his job title?", "a": "It is just a mane for the job", "type": "mcq" },
+        { "num": 25, "q": "Quyển 2 - Test 1: Alan considers his job to be", "a": "administrative", "type": "mcq" },
+        { "num": 26, "q": "Quyển 2 - Test 1: When he started in film, Alan did the same kind of work as before", "a": "same kind of work as before", "type": "mcq" },
+        { "num": 27, "q": "Quyển 2 - Test 1: When Alan was working on his latest film, there were difficulties moving the equipment", "a": "difficulties moving the equipment", "type": "mcq" },
+        { "num": 28, "q": "Quyển 2 - Test 1: For Alan, the disadvantage of the job is the effect on family life", "a": "effect on family life", "type": "mcq" },
+        { "num": 29, "q": "Quyển 2 - Test 1: For a job like this, Alan recommends studying to be an electrician", "a": "studying to be an electrician", "type": "mcq" },
+        { "num": 30, "q": "Quyển 2 - Test 1: In thinking about the future, Alan wants to continue doing the same job", "a": "continue doing the same job", "type": "mcq" },
+        { "num": 24, "q": "Quyển 3 - Test 1 (Stan Leach): Stan says that the best thing about walking is that you can?", "a": "Please yourself how you do it", "type": "mcq" },
+        { "num": 25, "q": "Quyển 3 - Test 1 (Stan Leach): Stan’s opinion on scrambling is that?", "a": "People doing it may need...", "type": "mcq" },
+        { "num": 26, "q": "Quyển 3 - Test 1 (Stan Leach): What did Stan discover when he went climbing?", "a": "It can be very frightening", "type": "mcq" },
+        { "num": 27, "q": "Quyển 3 - Test 1 (Stan Leach): What does Stan say about mountain biking?", "a": "Britain is not the best place for it", "type": "mcq" },
+        { "num": 28, "q": "Quyển 3 - Test 1 (Stan Leach): Stan’s advice on scuba diving is that?", "a": "It is easier than it seems", "type": "mcq" },
+        { "num": 29, "q": "Quyển 3 - Test 1 (Stan Leach): What is Stan’s view of skydiving?", "a": "It is surprisingly popular", "type": "mcq" },
+        { "num": 30, "q": "Quyển 3 - Test 1 (Stan Leach): What does Stan say about canoeing?", "a": "You can do it in condition that suit you", "type": "mcq" }
+    ],
+    "FCE Bổ sung 21-25": [
+        { "num": 21, "q": "What was the main reason Lily wanted to go to Machu Picchu?", "a": "the historical importance of the place", "type": "mcq" },
+        { "num": 22, "q": "Lily prepared for her journey through the mountains by", "a": "walking quite long distance every day", "type": "mcq" },
+        { "num": 23, "q": "She decided to do her walk in July because", "a": "the weather conditions are best for walking then", "type": "mcq" },
+        { "num": 24, "q": "What did she find toughest about her journey?", "a": "Sometimes it was difficult to walk.", "type": "mcq" },
+        { "num": 25, "q": "What surprised her during her journey?", "a": "how easy it was to talk to the children", "type": "mcq" },
+        { "num": 21, "q": "Louise Graham: How long has Louise been working at Ravensfield?", "a": "about two years", "type": "mcq" },
+        { "num": 22, "q": "Louise Graham: When she started working at the centre, she felt rather", "a": "nervous in case she did her job badly", "type": "mcq" },
+        { "num": 23, "q": "Louise Graham: What does she most enjoy about working with children", "a": "helping the less able ones achieve more", "type": "mcq" },
+        { "num": 24, "q": "Louise Graham: How does she feel about working at night?", "a": "It’s a necessary part of the job.", "type": "mcq" },
+        { "num": 25, "q": "Louise Graham: At the end of a course, the children", "a": "get on much better with each other", "type": "mcq" }
+    ]
+};
+
+// Thu thập danh sách đáp án thực tế loại trừ trùng lặp cho đáp án nhiễu
+let allCorrectAnswers = [];
+for (let section in rawData) {
+    rawData[section].forEach(item => {
+        if (!allCorrectAnswers.includes(item.a.trim().toLowerCase())) {
+            allCorrectAnswers.push(item.a.trim().toLowerCase());
+        }
+    });
+}
+
+const distractorPool = [
+    "He wanted to complete his education first", "She was deeply disappointed by the results",
+    "It requires long years of hard training", "Because they offered a much higher income",
+    "A completely unexpected family emergency", "By hiring a local vehicle or walking",
+    "It was canceled due to sudden political situations", "The local authority refused to fund the project",
+    "The environment was far more challenging", "To find more advanced guidelines online",
+    "She felt insecure about talking to strangers", "In front of a large international airport",
+    "It was postponed until next autumn season", "The instructions given were too confusing",
+    "They plan to start a different course together", "He could not finish his homework on time"
+];
+
+const bookKeys = Object.keys(rawData);
+let currentBookIndex = 0;
+let currentQuestions = [];
+let userScoreMap = {};
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderTabs();
+    loadBook(bookKeys[0]);
+});
+
+function renderTabs() {
+    const tabsBox = document.getElementById("tabs-box");
+    tabsBox.innerHTML = "";
+    bookKeys.forEach((bookName, index) => {
+        const btn = document.createElement("button");
+        btn.className = `tab-btn ${index === currentBookIndex ? 'active' : ''}`;
+        btn.innerText = bookName;
+        btn.onclick = () => {
+            currentBookIndex = index;
+            loadBook(bookName);
+        };
+        tabsBox.appendChild(btn);
+    });
+}
+
+function loadBook(bookName) {
+    document.getElementById("current-book-title").innerText = bookName;
+    
+    const tabs = document.querySelectorAll(".tab-btn");
+    tabs.forEach((tab, idx) => {
+        if (idx === currentBookIndex) tab.classList.add("active");
+        else tab.classList.remove("active");
+    });
+
+    currentQuestions = JSON.parse(JSON.stringify(rawData[bookName]));
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+}
+
+function generateOptions(qObj) {
+    if (qObj.type === "tf") return ["T", "F"];
+    if (qObj.type === "ab") return ["A", "B"];
+    
+    let options = [qObj.a];
+    let safeDistractors = distractorPool.filter(ans => {
+        return !allCorrectAnswers.includes(ans.trim().toLowerCase()) && ans.trim().toLowerCase() !== qObj.a.trim().toLowerCase();
+    });
+    
+    safeDistractors.sort(() => Math.random() - 0.5);
+    for (let i = 0; i < 3; i++) {
+        if(safeDistractors[i]) {
+            options.push(safeDistractors[i]);
+        } else {
+            options.push("Alternative Option Answer " + (i + 1)); 
+        }
+    }
+    return options.sort(() => Math.random() - 0.5);
+}
+
+function renderQuestions() {
+    const quizBox = document.getElementById("quiz-box");
+    quizBox.innerHTML = "";
+
+    currentQuestions.forEach((qObj, qIndex) => {
+        if (!qObj.generatedOptions) {
+            qObj.generatedOptions = generateOptions(qObj);
+        }
+
+        const card = document.createElement("div");
+        card.className = "question-card";
+
+        const qText = document.createElement("div");
+        qText.className = "question-text";
+        qText.innerText = `Câu ${qObj.num}: ${qObj.q}`;
+        card.appendChild(qText);
+
+        const optionsGrid = document.createElement("div");
+        optionsGrid.className = `options-grid ${qObj.type !== 'mcq' ? 'binary' : ''}`;
+
+        qObj.generatedOptions.forEach(optionText => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = optionText;
+            
+            btn.onclick = () => checkAnswer(btn, optionText, qObj.a, qIndex, optionsGrid);
+            optionsGrid.appendChild(btn);
+        });
+
+        card.appendChild(optionsGrid);
+        quizBox.appendChild(card);
+    });
+}
+
+function checkAnswer(selectedBtn, selectedText, correctAnswer, qIndex, optionsGrid) {
+    const allButtons = optionsGrid.querySelectorAll(".option-btn");
+    allButtons.forEach(btn => btn.disabled = true);
+
+    if (selectedText.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+        selectedBtn.classList.add("correct");
+        userScoreMap[qIndex] = true;
+    } else {
+        selectedBtn.classList.add("wrong");
+        userScoreMap[qIndex] = false;
+        
+        allButtons.forEach(btn => {
+            if (btn.innerText.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                btn.classList.add("correct");
+            }
+        });
+    }
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const total = currentQuestions.length;
+    if (total === 0) return;
+
+    const correctCount = Object.values(userScoreMap).filter(val => val === true).length;
+    const percentage = (correctCount / total) * 100;
+
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+    const btnNext = document.getElementById("btn-next");
+
+    progressBar.style.width = `${percentage}%`;
+    progressText.innerText = `${correctCount}/${total} ĐÚNG`;
+
+    if (correctCount === total) {
+        btnNext.style.display = "block";
+    } else {
+        btnNext.style.display = "none";
+    }
+}
+
+function shuffleCurrentBook() {
+    currentQuestions.sort(() => Math.random() - 0.5);
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+    renderQuestions();
+    updateProgressBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToNextBook() {
+    if (currentBookIndex < bookKeys.length - 1) {
+        currentBookIndex++;
+        loadBook(bookKeys[currentBookIndex]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        alert("Chúc mừng bạn! Bạn đã hoàn thành xuất sắc toàn bộ hệ thống câu hỏi FCE từ 21-30!");
+    }
+}
+</script>
+
+</body>
+</html>
