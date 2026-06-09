@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Luyện Đáp Án PET - Phân Môn Đọc Hiểu</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #2980b9;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f7;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50, #2980b9);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Tabs phân chia 3 Cụm câu hỏi */
+        .part-tabs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .part-tab-btn {
+            padding: 12px 5px;
+            border: 2px solid var(--accent-color);
+            background: white;
+            color: var(--accent-color);
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .part-tab-btn.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Tabs phân chia quyển sách */
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 15px;
+            border: none;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background-color: #dfe6e9;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(44, 62, 80, 0.3);
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-shuffle {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--accent-color);
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .options-grid.binary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: var(--light-color);
+            border: 2px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .options-grid.binary .option-btn {
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--error-color) !important;
+            color: #721c24 !important;
+        }
+
+        .progress-bar-container {
+            background: #dee2e6;
+            border-radius: 50px;
+            height: 10px;
+            width: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--success-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        @media (max-width: 600px) {
+            .part-tabs-container {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            .tabs-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HỆ THỐNG LUYỆN ĐÁP ÁN: MÔN ĐỌC HIỂU</h1>
+    <p>Giao diện chia tách theo trang lý tưởng - Chống học vẹt tuyệt đối</p>
+    <div class="container" style="margin-top: 15px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:5px;">
+            <span>Tiến độ hoàn thành cụm hiện tại:</span>
+            <span id="progress-text">0/0 ĐÚNG</span>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="part-tabs-container">
+        <button id="part-btn-1" class="part-tab-btn active" onclick="switchPart('1-5')">📘 Cụm 1: Câu 1-5 (Trang 1-5)</button>
+        <button id="part-btn-2" class="part-tab-btn" onclick="switchPart('6-22')">🎯 Cụm 2: Câu 6-22 (Trang 7-22)</button>
+        <button id="part-btn-3" class="part-tab-btn" onclick="switchPart('23-32')">🚀 Cụm 3: Câu 23-32 (Trang 25-40)</button>
+    </div>
+
+    <div class="tabs-container" id="tabs-box"></div>
+
+    <div class="control-panel">
+        <div class="book-title" id="current-book-title">Loading...</div>
+        <button class="btn btn-shuffle" onclick="shuffleCurrentBook()">🎲 Trộn câu hỏi</button>
+    </div>
+
+    <div class="quiz-container" id="quiz-box"></div>
+</div>
+
+<div id="smart-nav-wrapper" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Segoe UI', sans-serif;">
+    <button id="smart-nav-trigger" onclick="toggleSmartMenu(event)" style="
+        width: 50px; height: 50px; border-radius: 50%; background: #2c3e50; color: white;
+        border: 2px solid #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer;
+        font-size: 1.4rem; display: flex; align-items: center; justify-content: center; outline: none;
+    ">
+        📱
+    </button>
+
+    <div id="smart-nav-menu" style="
+        position: absolute; bottom: 60px; right: 0; background: #ffffff; padding: 12px;
+        border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); border: 2px solid #2c3e50;
+        width: 250px; display: none; flex-direction: column; gap: 8px;
+    ">
+        <div style="font-weight: bold; font-size: 0.85rem; color: #7f8c8d; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 6px;">
+            ➔ CHUYỂN BÀI NHANH
+        </div>
+        <a href="index.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #4a90e2;">📘 Trang Chủ (Nghe Part 1)</a>
+        <a href="part2.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #4a90e2;">🎯 Nghe Part 2 (Câu 6-10)</a>
+        <a href="part4.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #1abc9c;">✅ Nghe Part 4 (Câu 11-16)</a>
+        <a href="fce.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #e67e22;">🎧 FCE Part 1 (Câu 16-20)</a>
+        <a href="fce-part3.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #8e44ad;">🚀 FCE Part 3 (Câu 21-25)</a>
+        <a href="reading.html" style="display: block; padding: 10px 12px; background: #e3effd; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #2c3e50;">📖 Môn Đọc Hiểu (Câu 1-32)</a>
+    </div>
+</div>
+
+<script>
+const fullDataset = {
+    "1-5": {
+        "PET Extra": [
+            { "num": 1, "q": "What is the writer trying to do in the article? (City space want to knock down)", "a": "Describe the argument against the new leisure center", "type": "mcq" },
+            { "num": 2, "q": "What will the reader discover from the article?", "a": "How long the sports club has been in Layton", "type": "mcq" },
+            { "num": 3, "q": "What does the action group think about the new leisure center?", "a": "It will not be right for the area", "type": "mcq" },
+            { "num": 4, "q": "Which group of people is keen on having the new leisure center?", "a": "People working in the tourist ...", "type": "mcq" },
+            { "num": 5, "q": "What would be a good headline for the article?", "a": "Leisure plans under attack", "type": "mcq" },
+            { "num": 1, "q": "What is the writer trying to do in the article? (Imagine of everyone in your street)", "a": "Describe a teacher’s idea about the…", "type": "mcq" },
+            { "num": 2, "q": "What can the reader find out from the article? (Singing text)", "a": "How singing is something anyone can", "type": "mcq" },
+            { "num": 3, "q": "Ruth believes the benefit of singing with other people is that …", "a": "You can get to know other people", "type": "mcq" },
+            { "num": 4, "q": "What made Ruth start her own class?", "a": "She enjoyed going to a singing class herself", "type": "mcq" },
+            { "num": 5, "q": "Which is the best advertisement for Ruth’s singing classes?", "a": "Sing with us- Think you can’t sing?", "type": "mcq" }
+        ],
+        "PET 1": [
+            { "num": 1, "q": "What is Jessica trying to do in her essay? (Jessica Bourne)", "a": "Give a balanced view of a Bond film she has seen.", "type": "mcq" },
+            { "num": 2, "q": "What can a reader find out from Jessica’s essay?", "a": "Whether she thinks Daniel Craig is the best James Bond.", "type": "mcq" },
+            { "num": 3, "q": "What does Jessica tell us about Craig in the new Bond film?", "a": "He performs some of the action scenes.", "type": "mcq" },
+            { "num": 4, "q": "What is one problem with the film, according to Jessica?", "a": "It’s sometimes hard to understand what’s happening.", "type": "mcq" },
+            { "num": 5, "q": "Which of these might appear in a magazine review of the new Bond film?", "a": "I’m not sure the title tells you", "type": "mcq" }
+        ],
+        "PET 2": [
+            { "num": 1, "q": "What is the writer trying to do in the text? (A month ago...)", "a": "Say how she spend some free time", "type": "mcq" },
+            { "num": 2, "q": "What can the reader learn from the text?", "a": "What sort of activities you can . . .", "type": "mcq" },
+            { "num": 3, "q": "How do you think the writer might describe her weekend?", "a": "Interesting", "type": "mcq" }
+        ],
+        "PET 3": [
+            { "num": 1, "q": "What is the writer trying to do in the text? (The best age to start learning)", "a": "Describe the different way of learning the violin", "type": "mcq" },
+            { "num": 2, "q": "Why should some one read the text?", "a": "To find out about Margaret’s teaching method", "type": "mcq" },
+            { "num": 3, "q": "What opinion does Margaret have about her best pupils?", "a": "They ought to find another teacher", "type": "mcq" }
+        ]
+    },
+    "6-22": {
+        "PET Extra": [
+            { "num": 6, "q": "Co-operative: This is the 32nd Co- operative film making competition for years", "a": "B", "type": "abc" },
+            { "num": 7, "q": "Co-operative: You can enter the competition without any experience of film- making", "a": "A", "type": "abc" },
+            { "num": 8, "q": "Co-operative: The Co-operative prefers short films", "a": "A", "type": "abc" },
+            { "num": 18, "q": "When will the festival start this year?", "a": "On Friday 9 October", "type": "mcq" },
+            { "num": 19, "q": "How many films were chosen for screening last year?", "a": "50", "type": "mcq" },
+            { "num": 20, "q": "Which of the following age is available for this competition?", "a": "19", "type": "mcq" }
+        ],
+        "PET 1": [
+            { "num": 6, "q": "Dolphin Trip: Paul has family connections with the place he first visited in New Zealand.", "a": "A", "type": "abc" },
+            { "num": 7, "q": "Dolphin Trip: Paul and his family chose to go to Kaikoura as part of their tour.", "a": "B", "type": "abc" },
+            { "num": 12, "q": "What is Kaikoura famous for?", "a": "dolphins and whales", "type": "mcq" },
+            { "num": 13, "q": "What was the weather like when the family started their dolphin trip?", "a": "cold and dark", "type": "mcq" }
+        ],
+        "PET 2": [
+            { "num": 6, "q": "Glowbewwise: If you start your holiday on April 1 st, you will return on April 19th.", "a": "B", "type": "abc" },
+            { "num": 7, "q": "Glowbewwise: Return flights are from Melbourne.", "a": "A", "type": "abc" },
+            { "num": 18, "q": "How much does the entire tour cost?", "a": "1985", "type": "mcq" },
+            { "num": 19, "q": "What does the price include?", "a": "accommodation", "type": "mcq" }
+        ],
+        "PET 3": [
+            { "num": 6, "q": "The outdoor center: In August, four people visiting the Centre together by car would pay more than two people.", "a": "B", "type": "abc" },
+            { "num": 7, "q": "The outdoor center: The centre has activities for arrange of age groups.", "a": "A", "type": "abc" },
+            { "num": 18, "q": "When is the peak season of the Outdoor centre?", "a": "( 23 July— 11 September)", "type": "mcq" },
+            { "num": 19, "q": "What is the cost of adventure course?", "a": "( ₤22.50)", "type": "mcq" }
+        ]
+    },
+    "23-32": {
+        "FCE Test Plus 1": [
+            { "num": 23, "q": "A SHORT HISTORY OF THE REMOTE CONTROL: Why is it easy to be a ‘couch potato’ nowadays?", "a": "advances in technology have made it possible", "type": "mcq" },
+            { "num": 24, "q": "A SHORT HISTORY OF THE REMOTE CONTROL: What is the second paragraph about?", "a": "the problems of early remote controls", "type": "mcq" },
+            { "num": 25, "q": "What was the name of the first remote control?", "a": "Lazy Bones.", "type": "mcq" },
+            { "num": 26, "q": "What was the main problem with ‘Lazy Bones’?... ", "a": "The cable tripled many people.", "type": "mcq" },
+            { "num": 27, "q": "What was the main problem of the ‘Flashmatic’?", "a": "channels changed even with other kinds of light.", "type": "mcq" },
+            { "num": 28, "q": "What was another problem with it?", "a": "It was technically complex for the time.", "type": "mcq" },
+            { "num": 29, "q": "What does ‘it’ in paragraph 6 refer to?", "a": "the sun", "type": "mcq" },
+            { "num": 30, "q": "When was the remote based on ultrasonics produced?", "a": "In 1956", "type": "mcq" },
+            { "num": 31, "q": "What was the problem with the remote based on ultrasonics?", "a": "It reacted to other noises, too.", "type": "mcq" },
+            { "num": 32, "q": "What does the writer call ‘universal’ remotes?", "a": "The kind used to operate several appliances.", "type": "mcq" }
+        ],
+        "Quyển 1 - Test 1": [
+            { "num": 23, "q": "Harriet Walter decided to write her book because she", "a": "wanted to satisfy people’s curiosity about acting in the theatre", "type": "mcq" },
+            { "num": 24, "q": "In paragraph two, we learn that Harriet’s book aims to", "a": "correct some of the impressions people have of the theatre", "type": "mcq" },
+            { "num": 25, "q": "What problem do actors have with newspaper publicity?", "a": "It often does more harm than good.", "type": "mcq" },
+            { "num": 26, "q": "Harriet uses the example of the car journey to show that", "a": "acting shares characteristics with other repetitive activities", "type": "mcq" },
+            { "num": 27, "q": "What does “demystify” in paragraph 4 mean?", "a": "to make everyone to understand easily", "type": "mcq" },
+            { "num": 28, "q": "What does “it” (in paragraph 4) refer to?", "a": "acting in the same play every night", "type": "mcq" },
+            { "num": 29, "q": "Harriet criticises theatre reviewers because they", "a": "do not give enough recognition to the art of character acting", "type": "mcq" },
+            { "num": 30, "q": "What does “slipping into” in paragraph 6 mean?", "a": "playing someone’s role", "type": "mcq" },
+            { "num": 31, "q": "Harriet says that after actors have played a particular character, they", "a": "will never forget how to play the part", "type": "mcq" },
+            { "num": 32, "q": "What does Harriet say about her early work?", "a": "It has been a valuable influence on the work she has done since.", "type": "mcq" }
+        ],
+        "Quyển 1 - Test 2": [
+            { "num": 23, "q": "What was the narrator’s impression of the station that morning? (Baltimore station)", "a": "It was unusually busy", "type": "mcq" },
+            { "num": 24, "q": "Why does the narrator show an interest in the grey–haired stranger?", "a": "He was fascinated by the stranger’s questions", "type": "mcq" },
+            { "num": 25, "q": "What is the meaning of ‘matched–luggage’ (paragraph 3)?", "a": "Luggage with similar appearance", "type": "mcq" },
+            { "num": 26, "q": "What does the writer mean by ‘she went on guard’ (paragraph 6)?", "a": "The woman was ready to call the police.", "type": "mcq" },
+            { "num": 27, "q": "What is the meaning of the expression ‘stopping for groceries’ (paragraph 7)?", "a": "The man stopped buying groceries", "type": "mcq" },
+            { "num": 28, "q": "According to the stranger, how was his wife feeling when he got home?", "a": "upset about their daughter’s situation", "type": "mcq" },
+            { "num": 29, "q": "What does ‘this’ (paragraph 8) refer to in the text?", "a": "the story", "type": "mcq" },
+            { "num": 30, "q": "When the narrator had heard the stranger’s explanation, he felt", "a": "doubtful about the combination of events", "type": "mcq" },
+            { "num": 31, "q": "When the narrator sees the packet, he thinks that the woman should", "a": "proceed carefully", "type": "mcq" },
+            { "num": 32, "q": "What do we learn about the narrator’s character from reading this extract?", "a": "He has a strong sense of curiosity", "type": "mcq" }
+        ],
+        "Bổ sung Đọc hiểu": [
+            { "num": 23, "q": "Getting the best out of our children: What is the ‘paradox’ in the Asian education model?", "a": "You would expect larger classes to get poorer results but they do not.", "type": "mcq" },
+            { "num": 24, "q": "British secondary school students ", "a": "enjoy better classroom conditions.", "type": "mcq" },
+            { "num": 25, "q": "What might make lessons in Korean schools more successful than in Britain?", "a": "better discipline", "type": "mcq" },
+            { "num": 26, "q": "It seems that the teachers in Britain have less…..", "a": "Power", "type": "mcq" },
+            { "num": 27, "q": "What is meant by ‘perhaps the number of students is far less relevant...’?", "a": "Class size does not affect student performance", "type": "mcq" },
+            { "num": 28, "q": "According to the writer, Asian students ……", "a": "don’t allow themselves much time to relax and have fun.", "type": "mcq" },
+            { "num": 29, "q": "What are the ‘two extremes’ mentioned in the last paragraph?", "a": "neglecting school and neglecting free time", "type": "mcq" },
+            { "num": 30, "q": "Based on what you have read, what is the writer’s opinion of the two educational systems?", "a": "Neither system is perfect.", "type": "mcq" },
+            { "num": 31, "q": "According to the writer, Asian teachers …………..", "a": "have a close relationship with and better understanding their students.", "type": "mcq" },
+            { "num": 32, "q": "What two factors may affect students’ academic performance?", "a": "Effective classroom management with strong discipline and family background", "type": "mcq" },
+            { "num": 23, "q": "My first bike: What’s Ewan Mc Gregor’s job?", "a": "Actor", "type": "mcq" },
+            { "num": 24, "q": "My first bike: Which is the name of the bike shop?", "a": "Buchan’s", "type": "mcq" },
+            { "num": 25, "q": "My first bike: Which is the legal age to ride a 50cc bike?", "a": "16", "type": "mcq" },
+            { "num": 26, "q": "At what age did Ewan Mc Gregor ride his first ride?", "a": "6", "type": "mcq" },
+            { "num": 27, "q": "What does such trivinlities (line 12) refer to?", "a": "The bike’s quality and its manufacture", "type": "mcq" },
+            { "num": 28, "q": "Ewan did not buy the bike straightaway because ", "a": "(he was too young to ride it)", "type": "mcq" },
+            { "num": 29, "q": "The aldult was frightened the first time Ewan rode a motobike because", "a": "(they thought he was going to have an accident)", "type": "mcq" },
+            { "num": 30, "q": "What was Ewan’s main reason for buying the motorbike?", "a": "(It was a useful means of transport)", "type": "mcq" },
+            { "num": 31, "q": "In paragraph 5 Ewan’s desire for bike meant he", "a": "(thought about nothing elsse)", "type": "mcq" },
+            { "num": 32, "q": "One result of Ewan’s accident was that he", "a": "(had to get a job)", "type": "mcq" }
+        ],
+        "Quyển 2 - Shop": [
+            { "num": 23, "q": "How did Janet feel when she first started her Saturday morning job?", "a": "She was pleased to be helping her father.", "type": "mcq" },
+            { "num": 24, "q": "Why did Janet feel guilty?", "a": "Because she ate some food when no one was looking.", "type": "mcq" },
+            { "num": 25, "q": "What do we learn about her grandmother’s office in the second paragraph?", "a": "It had too much furniture in it.", "type": "mcq" },
+            { "num": 26, "q": "“This” (paragraph 2) refers to _________.", "a": "the recommended wage.", "type": "mcq" },
+            { "num": 27, "q": "“Flustered” (paragraph 2) means _________.", "a": "confused.", "type": "mcq" },
+            { "num": 28, "q": "Why did Janet’s grandmother react angrily to her offer to fetch a pencil and paper?", "a": "Janet was unable to answer her question", "type": "mcq" },
+            { "num": 29, "q": "Why did Janet’s dad want to make the shop more attractive?", "a": "Because it was old-established.", "type": "mcq" },
+            { "num": 30, "q": "What did Janet’s father and grandmother disagree about?", "a": "how to keep their customers loyal to the shop", "type": "mcq" },
+            { "num": 31, "q": "What eventually persuaded Janet’s grandmother to buy a freezer?", "a": "She responded to pressure from her customers.", "type": "mcq" },
+            { "num": 32, "q": "What impression do we get of Janet’s feelings towards her grandmother?", "a": "She disliked her manner.", "type": "mcq" }
+        ]
+    }
+};
+
+let currentPart = "1-5"; 
+let currentBookName = "";
+let currentQuestions = [];
+let userScoreMap = {};
+let allCorrectAnswers = [];
+
+for (let p in fullDataset) {
+    for (let b in fullDataset[p]) {
+        fullDataset[p][b].forEach(item => {
+            if (!allCorrectAnswers.includes(item.a.trim().toLowerCase())) {
+                allCorrectAnswers.push(item.a.trim().toLowerCase());
+            }
+        });
+    }
+}
+
+const distractorPool = [
+    "To request assistance from local groups", "It was completely closed during holidays",
+    "They planning a completely unique project", "By taking a short taxi ride safely",
+    "He felt rather exhausted after swimming", "The data provided was fully inaccurate",
+    "A serious problem at the train station", "Because of the high tax rates in cities",
+    "It lacked proper historical elements"
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+    switchPart("1-5");
+});
+
+function switchPart(partKey) {
+    currentPart = partKey;
+    
+    document.getElementById("part-btn-1").classList.toggle("active", partKey === '1-5');
+    document.getElementById("part-btn-2").classList.toggle("active", partKey === '6-22');
+    document.getElementById("part-btn-3").classList.toggle("active", partKey === '23-32');
+    
+    const availableBooks = Object.keys(fullDataset[currentPart]);
+    currentBookName = availableBooks[0];
+    
+    renderBookTabs();
+    loadCurrentQuestions();
+}
+
+function renderBookTabs() {
+    const tabsBox = document.getElementById("tabs-box");
+    tabsBox.innerHTML = "";
+    
+    const books = Object.keys(fullDataset[currentPart]);
+    books.forEach(name => {
+        const btn = document.createElement("button");
+        btn.className = `tab-btn ${name === currentBookName ? 'active' : ''}`;
+        btn.innerText = name;
+        btn.onclick = () => {
+            currentBookName = name;
+            loadCurrentQuestions();
+        };
+        tabsBox.appendChild(btn);
+    });
+}
+
+function loadCurrentQuestions() {
+    document.getElementById("current-book-title").innerText = `${currentBookName} (Cụm từ câu ${currentPart})`;
+    
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        if (btn.innerText === currentBookName) btn.classList.add("active");
+        else btn.classList.remove("active");
+    });
+
+    currentQuestions = JSON.parse(JSON.stringify(fullDataset[currentPart][currentBookName]));
+    
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+}
+
+function generateOptions(qObj) {
+    if (qObj.type === "abc") return ["A", "B", "C"];
+    
+    let options = [qObj.a];
+    let safeDistractors = distractorPool.filter(ans => {
+        return !allCorrectAnswers.includes(ans.trim().toLowerCase()) && ans.trim().toLowerCase() !== qObj.a.trim().toLowerCase();
+    });
+    safeDistractors.sort(() => Math.random() - 0.5);
+    for (let i = 0; i < 3; i++) {
+        if (safeDistractors[i]) options.push(safeDistractors[i]);
+        else options.push("Alternative Option Choice " + (i + 1));
+    }
+    return options.sort(() => Math.random() - 0.5);
+}
+
+function renderQuestions() {
+    const quizBox = document.getElementById("quiz-box");
+    quizBox.innerHTML = "";
+
+    currentQuestions.forEach((qObj, qIndex) => {
+        if (!qObj.generatedOptions) {
+            qObj.generatedOptions = generateOptions(qObj);
+        }
+
+        const card = document.createElement("div");
+        card.className = "question-card";
+
+        const qText = document.createElement("div");
+        qText.className = "question-text";
+        qText.innerText = `Câu ${qObj.num}: ${qObj.q}`;
+        card.appendChild(qText);
+
+        const optionsGrid = document.createElement("div");
+        optionsGrid.className = `options-grid ${qObj.type === 'abc' ? 'binary' : ''}`;
+
+        qObj.generatedOptions.forEach(text => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = text;
+            btn.onclick = () => checkAnswer(btn, text, qObj.a, qIndex, optionsGrid);
+            optionsGrid.appendChild(btn);
+        });
+
+        card.appendChild(optionsGrid);
+        quizBox.appendChild(card);
+    });
+}
+
+function checkAnswer(selectedBtn, selectedText, correctAnswer, qIndex, optionsGrid) {
+    optionsGrid.querySelectorAll(".option-btn").forEach(btn => btn.disabled = true);
+
+    if (selectedText.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+        selectedBtn.classList.add("correct");
+        userScoreMap[qIndex] = true;
+    } else {
+        selectedBtn.classList.add("wrong");
+        userScoreMap[qIndex] = false;
+        optionsGrid.querySelectorAll(".option-btn").forEach(btn => {
+            if (btn.innerText.trim().toLowerCase() === correctAnswer.trim().toLowerCase()) {
+                btn.classList.add("correct");
+            }
+        });
+    }
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const total = currentQuestions.length;
+    if (total === 0) return;
+    const correctCount = Object.values(userScoreMap).filter(val => val === true).length;
+    document.getElementById("progress-bar").style.width = `${(correctCount / total) * 100}%`;
+    document.getElementById("progress-text").innerText = `${correctCount}/${total} ĐÚNG`;
+}
+
+function shuffleCurrentBook() {
+    currentQuestions.sort(() => Math.random() - 0.5);
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { 
+        userScoreMap[idx] = false; 
+        currentQuestions[idx].generatedOptions = generateOptions(currentQuestions[idx]); 
+    });
+    renderQuestions();
+    updateProgressBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleSmartMenu(event) {
+    event.stopPropagation();
+    var menu = document.getElementById('smart-nav-menu');
+    var trigger = document.getElementById('smart-nav-trigger');
+    if (menu.style.display === 'none' || menu.style.display === '') {
+        menu.style.display = 'flex'; trigger.innerText = '✖'; trigger.style.background = '#e74c3c';
+    } else {
+        menu.style.display = 'none'; trigger.innerText = '📱'; trigger.style.background = '#2c3e50';
+    }
+}
+
+document.addEventListener('click', function() {
+    var menu = document.getElementById('smart-nav-menu');
+    var trigger = document.getElementById('smart-nav-trigger');
+    if (menu && menu.style.display === 'flex') {
+        menu.style.display = 'none'; trigger.innerText = '📱'; trigger.style.background = '#2c3e50';
+    }
+});
+</script>
+</body>
+</html>
