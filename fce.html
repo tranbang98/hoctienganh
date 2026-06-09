@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Luyện Đáp Án FCE (Câu 16 - 20)</title>
+    <style>
+        :root {
+            --primary-color: #34495e;
+            --accent-color: #e67e22;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f7;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #34495e, #e67e22);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-back {
+            margin-bottom: 15px;
+        }
+
+        .nav-back a {
+            text-decoration: none;
+            color: #7f8c8d;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 10px 15px;
+            border: none;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background-color: #dfe6e9;
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .book-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--dark-color);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-shuffle {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .btn-shuffle:hover {
+            background-color: #3498db;
+            transform: translateY(-2px);
+        }
+
+        .btn-next-book {
+            background-color: #2ecc71;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+            margin: 30px auto 10px auto;
+            display: none;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+            animation: bounce 2s infinite;
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--accent-color);
+            transition: var(--transition);
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: var(--light-color);
+            border: 2px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--error-color) !important;
+            color: #721c24 !important;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .progress-bar-container {
+            background: #dee2e6;
+            border-radius: 50px;
+            height: 10px;
+            width: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--success-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 600px) {
+            .tabs-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .control-panel {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HỆ THỐNG LUYỆN ĐÁP ÁN FCE TEST PLUS 1</h1>
+    <p>Trắc nghiệm 4 lựa chọn (Từ câu 16 đến câu 20) - Đọc đề chọn đáp án đúng chuẩn xác</p>
+    <div class="container" style="margin-top: 15px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:5px;">
+            <span>Tiến độ hoàn thành:</span>
+            <span id="progress-text">0/0 ĐÚNG</span>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="nav-back">
+        <a href="index.html">⬅ Quay lại Trang chủ</a>
+    </div>
+
+    <div class="tabs-container" id="tabs-box"></div>
+
+    <div class="control-panel">
+        <div class="book-title" id="current-book-title">Bổ sung 1</div>
+        <button class="btn btn-shuffle" onclick="shuffleCurrentBook()">🎲 Trộn câu hỏi & Đáp án</button>
+    </div>
+
+    <div class="quiz-container" id="quiz-box"></div>
+
+    <div style="text-align: center; width: 100%;">
+        <button class="btn btn-next-book" id="btn-next" onclick="goToNextBook()">🚀 Tuyệt vời! Chuyển sang phần tiếp theo</button>
+    </div>
+</div>
+
+<script>
+const rawData = {
+    "Bổ sung Phần 1": [
+        { "num": 16, "q": "You hear part of an interview with a crime writer. What does he say about his home town?", "a": "It was a good background for the writing he does." },
+        { "num": 17, "q": "You hear a careers adviser talking to a woman who has applied for two jobs. What suggestion does he make?", "a": "ask the first company to be flexible" },
+        { "num": 18, "q": "You hear a girl talking about a psychology textbook. What does she say about it?", "a": "It is going to come in useful." },
+        { "num": 19, "q": "You hear the mother of a famous skier talking about a competition. She says that her daughter", "a": "didn’t tell her mother she was entering it" },
+        { "num": 20, "q": "You hear a film director talking about the actors she works with. How does she feel about the actors in her current film?", "a": "She approves of their attitudes." }
+    ],
+    "Bổ sung Phần 2": [
+        { "num": 16, "q": "You hear an advertisement for a local taxi firm. Which aspect are they emphasising", "a": "reliable service" },
+        { "num": 17, "q": "You hear a radio phone-in programme about a plan to build a new supermarket. Why has the woman phoned?", "a": "to support the plan if certain conditions are met" },
+        { "num": 18, "q": "You hear a young woman talking about a concert by her favourite band. What aspect of the concert disappointed her?", "a": "the length of the band's performance" },
+        { "num": 19, "q": "On the radio news, you hear a story about a missing dog. Where was the dog found?", "a": "in the countryside" },
+        { "num": 20, "q": "In a radio play, you hear a man talking to a woman. What is he doing?", "a": "promising to do something" }
+    ],
+    "Bổ sung Phần 3": [
+        { "num": 16, "q": "You hear two people talking about some music they’re listening to. What does the man say about the song?", "a": "It inspires him to take up a musical instrument" },
+        { "num": 17, "q": "You hear part of radio programme in which a teacher is talking about her own education. Why did she become a teacher?", "a": "She wanted other to have the same opportunities as her" },
+        { "num": 18, "q": "You hear a woman telling a friend about a new job she has. What problem does she have with the job?", "a": "Being asked to do tasks she’s not suited for" },
+        { "num": 19, "q": "You hear two students talking about an architecture course. What do they agree about?", "a": "The course is taught in an interesting way" },
+        { "num": 20, "q": "You hear two students talking about the chemistry laboratories at their college. What does the woman say about the laboratories?", "a": "They are not large enough" }
+    ],
+    "Bổ sung Phần 4": [
+        { "num": 16, "q": "You hear a psychologist talking about green spaces in cities. What does she say about them?", "a": "People fail to appreciate them as much as they should." },
+        { "num": 17, "q": "You hear part of an interview with a singer. What does he say about playing tennis?", "a": "It requires similar skills to singing." },
+        { "num": 18, "q": "You hear an actor talking about how she met her husband. How did she first meet him?", "a": "She appeared in a play with him." },
+        { "num": 19, "q": "You hear two people talking about a bus service. What does the man say about it?", "a": "It is punctual." },
+        { "num": 20, "q": "You hear a retired ballerina comparing dancers today with dancers in the past.", "a": "Are less concerned about expressing emotion" }
+    ],
+    "Bổ sung Phần 5": [
+        { "num": 16, "q": "You hear two friends talking about a laptop computer. What is the woman doing?", "a": "persuading her friend to buy one like it" },
+        { "num": 17, "q": "You hear two students talking about a play they have just seen. What do they agree was good about it?", "a": "The actors." },
+        { "num": 18, "q": "You hear two students talking about a friend. What do they agree about him?", "a": "He rarely complains about any thing" },
+        { "num": 19, "q": "You hear a lecturer talking to some of his students about their history project. What is he doing?", "a": "Encourage their to ask him questions about it" },
+        { "num": 20, "q": "You hear two TV sports presenters talking about their work. What do they agree about the sports presenters?", "a": "They have to be able to relate well to their audience" }
+    ],
+    "Bổ sung Phần 6": [
+        { "num": 16, "q": "You hear a man talking about his work. What is his job?", "a": "salesman" },
+        { "num": 17, "q": "You hear part of a a radio discussion about a TV nature programme. What did the speaker find disappointing about it?", "a": "the amount of information given" },
+        { "num": 18, "q": "You hear a woman and a man talking. Who are they?", "a": "employer and employee" },
+        { "num": 19, "q": "You hear two people talking about air pollution in the city. What do they agree about?", "a": "the need to reduce the amount of traffic in the city centre" },
+        { "num": 20, "q": "You hear a woman talking on the phone to an airline. What is the purpose of her call?", "a": "to ask them to do something" }
+    ],
+    "Bổ sung Phần 7": [
+        { "num": 16, "q": "You hear a man talking on the radio about a special kind of computer mouse. How does this mouse differ from others?", "a": "It can help people avoid injury" },
+        { "num": 17, "q": "You switch on a radio and hear a woman talking. Why did she decide to go abroad?", "a": "To help people in another country" },
+        { "num": 18, "q": "You over hear a man talking to a colleague about computer training course. What is the main opinion of the course?", "a": "It was a waste of time" },
+        { "num": 19, "q": "You hear two people talking. Where are they?", "a": "At a bus stop" },
+        { "num": 20, "q": "You hear a young man talking about moving to a big city. What was his biggest problem there?", "a": "Not having enough money" }
+    ],
+    "Bổ sung Phần 8": [
+        { "num": 16, "q": "You overhear a woman talking to her husband on a mobile phone. What is the background of the conversation?", "a": "Their son has schoolwork to complete before the start of term." },
+        { "num": 17, "q": "You hear a phone–in programme on the radio. Why has the man phoned?", "a": "to express his support for the traffic scheme" },
+        { "num": 18, "q": "On the radio, you hear a woman talking about her house. What has she recently done?", "a": "Solved a problem that she had" },
+        { "num": 19, "q": "You overhear two people discussing a friend. What language does their friend usually speak at home?", "a": "French" },
+        { "num": 20, "q": "You hear a man talking about an activity holiday he went on as a child with his family. How did he feel during the holiday?", "a": "bored by the climbing" }
+    ],
+    "Bổ sung Phần 9": [
+        { "num": 16, "q": "You hear a man talking on the phone to a computer technician. Why has he called?", "a": "to ask for some advice" },
+        { "num": 17, "q": "You hear a teenager talking about the summer job he does. How does he usually feel when he is working?", "a": "relaxed" },
+        { "num": 18, "q": "You overhear a young man talking to a friend. What does he regret?", "a": "not telling the truth" },
+        { "num": 19, "q": "You hear two people talking. How does the man feel now?", "a": "very relieved" },
+        { "num": 20, "q": "You switch on the radio during a programme. What is the programme about?", "a": "Wildlife" }
+    ],
+    "Bổ sung Phần 10": [
+        { "num": 16, "q": "You hear a woman and a man talking about taking up sailing. What does the woman say about it?", "a": "It’s too expensive." },
+        { "num": 17, "q": "You overhear a man talking on the phone in a hospital. Who is he?", "a": "a patient" },
+        { "num": 18, "q": "You hear a young person talking about an interest she has. Where is she?", "a": "a bookshop" },
+        { "num": 19, "q": "You hear a teacher talking to a student. Why is she talking to him?", "a": "to suggest he should do something" },
+        { "num": 20, "q": "You overhear a man and a woman talking about meeting two other people. Where are these people going to meet their friends?", "a": "at a hotel" }
+    ],
+    "Bổ sung Phần 11": [
+        { "num": 16, "q": "You hear someone talking about the women’s football. What is she doing when she speaks?", "a": "Suggesting how to attract young girls to the sport" },
+        { "num": 17, "q": "You hear a man talking in the radio about bag made for use on walking trips. How does this new bag differ from others?", "a": "There are some extra features" },
+        { "num": 18, "q": "On the radio, you hear a man discussing a cartoon film about dinosaurs. What aspect of the film disappointed him?", "a": "The design of the background" },
+        { "num": 19, "q": "You over hear a couple talking about keeping fit. What do they agree about?", "a": "The need to be more active" },
+        { "num": 20, "q": "In a radio, you hear a woman talking on the phone to a friend. Where does the woman want her friend to meet her?", "a": "On the beach" }
+    ],
+    "Bổ sung Phần 12": [
+        { "num": 16, "q": "You overhear a woman talking about her car. How does she feel about it?", "a": "Her lifestyle makes her dependent on it" },
+        { "num": 17, "q": "Who hear someone talking about a journey she made with a friend. How did they travel after they left the village?", "a": "By motorcycle" },
+        { "num": 18, "q": "You hear a man on radio giving advice to listeners. What is he giving advice about?", "a": "Staying safe online" },
+        { "num": 19, "q": "You overhear someone talking about a recent holiday. What disappointed her about the hotel where she stayed?", "a": "Few meals were served" },
+        { "num": 20, "q": "you hear a woman talking about buying a work of art over the internet. What does she say about it?", "a": "It was less complicated than she had expected" }
+    ]
+};
+
+// Thu thập toàn bộ đáp án chính xác để đưa vào danh sách đen (Blacklist) loại trừ trùng lặp
+let allCorrectAnswers = [];
+for (let section in rawData) {
+    rawData[section].forEach(item => {
+        if (!allCorrectAnswers.includes(item.a.trim().toLowerCase())) {
+            allCorrectAnswers.push(item.a.trim().toLowerCase());
+        }
+    });
+}
+
+// Kho đáp án lựa chọn sai FCE phong phú để trộn đề câu hỏi
+const distractorPool = [
+    "To request a full refund from the manager", "It was much too crowded and noisy", 
+    "They planning to change the starting time", "By taking a short train journey", 
+    "He felt completely exhausted after the class", "The information was totally incorrect", 
+    "To cancel the reservation immediately", "Because of the high price of tickets", 
+    "It lacked modern historical details", "She wanted to improve her computer skills", 
+    "They offered a discount for young students", "At the corner of a busy street market", 
+    "It was postponed due to heavy rainfall", "The background music was too loud", 
+    "To find out about advanced courses", "She was unable to contact her parents",
+    "It was less interesting than they expected", "To register for a new examination",
+    "They didn't have enough time to prepare", "The quality of service was poor"
+];
+
+const bookKeys = Object.keys(rawData);
+let currentBookIndex = 0;
+let currentQuestions = [];
+let userScoreMap = {};
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderTabs();
+    loadBook(bookKeys[0]);
+});
+
+function renderTabs() {
+    const tabsBox = document.getElementById("tabs-box");
+    tabsBox.innerHTML = "";
+    bookKeys.forEach((bookName, index) => {
+        const btn = document.createElement("button");
+        btn.className = `tab-btn ${index === currentBookIndex ? 'active' : ''}`;
+        btn.innerText = bookName.replace("Bổ sung ", "Mục ");
+        btn.onclick = () => {
+            currentBookIndex = index;
+            loadBook(bookName);
+        };
+        tabsBox.appendChild(btn);
+    });
+}
+
+function loadBook(bookName) {
+    document.getElementById("current-book-title").innerText = bookName;
+    
+    const tabs = document.querySelectorAll(".tab-btn");
+    tabs.forEach((tab, idx) => {
+        if (idx === currentBookIndex) tab.classList.add("active");
+        else tab.classList.remove("active");
+    });
+
+    currentQuestions = JSON.parse(JSON.stringify(rawData[bookName]));
+    
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+}
+
+function generateOptions(correctAnswer) {
+    let options = [correctAnswer];
+    
+    let safeDistractors = distractorPool.filter(ans => {
+        return !allCorrectAnswers.includes(ans.trim().toLowerCase()) && ans.trim().toLowerCase() !== correctAnswer.trim().toLowerCase();
+    });
+    
+    safeDistractors.sort(() => Math.random() - 0.5);
+    
+    for (let i = 0; i < 3; i++) {
+        if(safeDistractors[i]) {
+            options.push(safeDistractors[i]);
+        } else {
+            options.push("Incorrect Option Alternative " + (i + 1)); 
+        }
+    }
+
+    return options.sort(() => Math.random() - 0.5);
+}
+
+function renderQuestions() {
+    const quizBox = document.getElementById("quiz-box");
+    quizBox.innerHTML = "";
+
+    currentQuestions.forEach((qObj, qIndex) => {
+        if (!qObj.generatedOptions) {
+            qObj.generatedOptions = generateOptions(qObj.a);
+        }
+
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.id = `q-card-${qIndex}`;
+
+        const qText = document.createElement("div");
+        qText.className = "question-text";
+        qText.innerText = `Câu ${qObj.num}: ${qObj.q}`;
+        card.appendChild(qText);
+
+        const optionsGrid = document.createElement("div");
+        optionsGrid.className = "options-grid";
+
+        qObj.generatedOptions.forEach(optionText => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = optionText;
+            
+            btn.onclick = () => checkAnswer(btn, optionText, qObj.a, qIndex, optionsGrid);
+            optionsGrid.appendChild(btn);
+        });
+
+        card.appendChild(optionsGrid);
+        quizBox.appendChild(card);
+    });
+}
+
+function checkAnswer(selectedBtn, selectedText, correctAnswer, qIndex, optionsGrid) {
+    const allButtons = optionsGrid.querySelectorAll(".option-btn");
+    allButtons.forEach(btn => btn.disabled = true);
+
+    if (selectedText === correctAnswer) {
+        selectedBtn.classList.add("correct");
+        userScoreMap[qIndex] = true;
+    } else {
+        selectedBtn.classList.add("wrong");
+        userScoreMap[qIndex] = false;
+        
+        allButtons.forEach(btn => {
+            if (btn.innerText === correctAnswer) {
+                btn.classList.add("correct");
+            }
+        });
+    }
+
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const total = currentQuestions.length;
+    if (total === 0) return;
+
+    const correctCount = Object.values(userScoreMap).filter(val => val === true).length;
+    const percentage = (correctCount / total) * 100;
+
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+    const btnNext = document.getElementById("btn-next");
+
+    progressBar.style.width = `${percentage}%`;
+    progressText.innerText = `${correctCount}/${total} ĐÚNG`;
+
+    if (correctCount === total) {
+        btnNext.style.display = "block";
+    } else {
+        btnNext.style.display = "none";
+    }
+}
+
+function shuffleCurrentBook() {
+    currentQuestions.sort(() => Math.random() - 0.5);
+    
+    currentQuestions.forEach(qObj => {
+        qObj.generatedOptions = generateOptions(qObj.a);
+    });
+
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToNextBook() {
+    if (currentBookIndex < bookKeys.length - 1) {
+        currentBookIndex++;
+        loadBook(bookKeys[currentBookIndex]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        alert("Chúc mừng bạn! Bạn đã hoàn thành xuất sắc toàn bộ kho câu hỏi FCE 16-20!");
+    }
+}
+</script>
+
+</body>
+</html>
