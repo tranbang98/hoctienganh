@@ -697,40 +697,100 @@ function goToNextBook() {
     }
 }
 </script>
-<!-- CHÈN ĐOẠN NÀY VÀO NGAY TRÊN THẺ </body> Ở CUỐI FILE INDEX.HTML -->
-<div id="nav-floating-menu" style="
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-    background: #ffffff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    border: 2px solid #2c3e50;
-    max-width: 280px;
-    font-family: 'Segoe UI', sans-serif;
-">
-    <div style="font-weight: bold; font-size: 0.95rem; margin-bottom: 10px; color: #2c3e50; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 5px;">
-        🎯 CHUYỂN NHANH BÀI TẬP
-    </div>
-    <div style="display: flex; flex-direction: column; gap: 8px;">
-        <a href="index.html" style="display: block; padding: 8px 12px; background: #e3effd; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #4a90e2;">
+<!-- ĐOẠN MÃ MENU THU GỌN THÔNG MINH - CHÈN NGAY TRÊN THẺ </body> -->
+<div id="smart-nav-wrapper" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; font-family: 'Segoe UI', sans-serif;">
+    <!-- Nút tròn kích hoạt (Luôn nhỏ gọn, không chiếm diện tích) -->
+    <button id="smart-nav-trigger" onclick="toggleSmartMenu(event)" style="
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: #2c3e50;
+        color: white;
+        border: 2px solid #ffffff;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        cursor: pointer;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+    ">
+        📱
+    </button>
+
+    <!-- Khung Menu chứa danh sách các Part (Mặc định ẩn đi, chỉ hiện khi bấm nút) -->
+    <div id="smart-nav-menu" style="
+        position: absolute;
+        bottom: 60px;
+        right: 0;
+        background: #ffffff;
+        padding: 12px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        border: 2px solid #2c3e50;
+        width: 250px;
+        display: none;
+        flex-direction: column;
+        gap: 8px;
+        animation: menuFadeIn 0.2s ease-out;
+    ">
+        <div style="font-weight: bold; font-size: 0.85rem; color: #7f8c8d; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 6px; margin-bottom: 4px;">
+            ➔ CHUYỂN BÀI NHANH
+        </div>
+        <a href="index.html" style="display: block; padding: 10px 12px; background: #e3effd; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #4a90e2;">
             📘 PET - Part 1 (Câu 1-5)
         </a>
-        <a href="part2.html" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #4a90e2; transition: 0.2s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+        <a href="part2.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #4a90e2;">
             🎯 PET - Part 2 (Câu 6-10)
         </a>
-        <a href="part4.html" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #1abc9c; transition: 0.2s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+        <a href="part4.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #1abc9c;">
             ✅ PET - Part 4 (Câu 11-16)
         </a>
-        <a href="fce.html" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #e67e22; transition: 0.2s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+        <a href="fce.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #e67e22;">
             🎧 FCE - Part 1 (Câu 16-20)
         </a>
-        <a href="fce-part3.html" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #8e44ad; transition: 0.2s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+        <a href="fce-part3.html" style="display: block; padding: 10px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #8e44ad;">
             🚀 FCE - Part 3 (Câu 21-25)
         </a>
     </div>
 </div>
+
+<style>
+    @keyframes menuFadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+    function toggleSmartMenu(event) {
+        event.stopPropagation();
+        var menu = document.getElementById('smart-nav-menu');
+        var trigger = document.getElementById('smart-nav-trigger');
+        
+        if (menu.style.display === 'none' || menu.style.display === '') {
+            menu.style.display = 'flex';
+            trigger.innerText = '✖';
+            trigger.style.background = '#e74c3c'; // Đổi sang màu đỏ khi mở
+        } else {
+            menu.style.display = 'none';
+            trigger.innerText = '📱';
+            trigger.style.background = '#2c3e50';
+        }
+    }
+
+    // Tự động đóng menu nếu người dùng chạm tay ra ngoài màn hình làm bài
+    document.addEventListener('click', function() {
+        var menu = document.getElementById('smart-nav-menu');
+        var trigger = document.getElementById('smart-nav-trigger');
+        if (menu && menu.style.display === 'flex') {
+            menu.style.display = 'none';
+            trigger.innerText = '📱';
+            trigger.style.background = '#2c3e50';
+        }
+    });
+</script>
 </body>
 </html>
