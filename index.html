@@ -279,7 +279,6 @@
 </div>
 
 <script>
-// Toàn bộ kho dữ liệu đã được bóc tách sạch sẽ và chuẩn hóa cấu trúc
 const rawData = {
     "Quyển Extra": [
         { "q": "What is the woman first memory?", "a": "Father took her to the seaside" },
@@ -481,28 +480,38 @@ const rawData = {
     ]
 };
 
-// Gom toàn bộ đáp án của hệ thống để làm kho lấy đáp án nhiễu (Dữ liệu lớn)
-let allAnswersPool = [];
+// Thu thập TẤT CẢ các đáp án đúng của hệ thống để làm danh sách đen (Blacklist loại trừ)
+let allCorrectAnswers = [];
 for (let book in rawData) {
     rawData[book].forEach(item => {
-        if (!allAnswersPool.includes(item.a)) {
-            allAnswersPool.push(item.a);
+        if (!allCorrectAnswers.includes(item.a.trim().toLowerCase())) {
+            allCorrectAnswers.push(item.a.trim().toLowerCase());
         }
     });
 }
 
+// Bổ sung kho từ vựng nhiễu ảo độc lập phong phú theo văn phong PET/FCE (Không trùng bất kỳ đáp án đúng nào)
+const distractorPool = [
+    "A plastic bottle", "In the living room", "Heavy rainy and windy", "Next to the post office",
+    "At nine o'clock", "By bicycle", "A pair of socks", "They are dancing", "A leather wallet",
+    "Apple pie and ice cream", "Under the bed", "Green jacket", "Running in the stadium",
+    "A silver watch", "History book", "In the kitchen drawer", "With strawberries", "A text message",
+    "Ten to eight (7:50)", "Playing badminton", "A blue tie", "Behind the library", "In front of the cinema",
+    "A map of the city", "Heavy traffic", "By bus", "A gold ring", "Watching TV", "At the corner of the street",
+    "A wooden table", "Carrot cake", "Next to the bank", "By train", "A pair of sunglasses", "In the suitcase",
+    "A bunch of flowers", "Playing chess", "A red skirt", "Near the park", "At half past eight"
+];
+
 const bookKeys = Object.keys(rawData);
 let currentBookIndex = 0;
 let currentQuestions = [];
-let userScoreMap = {}; // Lưu trữ trạng thái đúng của từng câu hỏi trong quyển hiện tại
+let userScoreMap = {};
 
-// Khởi chạy ứng dụng
 document.addEventListener("DOMContentLoaded", () => {
     renderTabs();
     loadBook(bookKeys[0]);
 });
 
-// Tạo thanh Tab các Quyển học
 function renderTabs() {
     const tabsBox = document.getElementById("tabs-box");
     tabsBox.innerHTML = "";
@@ -518,21 +527,17 @@ function renderTabs() {
     });
 }
 
-// Tải dữ liệu của Quyển được chọn
 function loadBook(bookName) {
     document.getElementById("current-book-title").innerText = bookName;
     
-    // Đồng bộ lại Class Active của các nút Tab
     const tabs = document.querySelectorAll(".tab-btn");
     tabs.forEach((tab, idx) => {
         if (idx === currentBookIndex) tab.classList.add("active");
         else tab.classList.remove("active");
     });
 
-    // Bản sao dữ liệu gốc để tránh đột biến cấu trúc gốc khi xáo trộn
     currentQuestions = JSON.parse(JSON.stringify(rawData[bookName]));
     
-    // Khởi tạo bảng điểm của quyển này
     userScoreMap = {};
     currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
 
@@ -540,34 +545,41 @@ function loadBook(bookName) {
     updateProgressBar();
 }
 
-// Thuật toán sinh 3 đáp án nhiễu thông minh (A, B, C, D) không trùng lặp
+// HÀM ĐÃ ĐƯỢC THAY ĐỔI: Chống trùng đáp án chính xác triệt để
 function generateOptions(correctAnswer) {
     if (correctAnswer.toLowerCase() === "correct" || correctAnswer.toLowerCase() === "incorrect") {
         return ["Correct", "Incorrect"];
     }
 
     let options = [correctAnswer];
-    // Lọc kho đáp án nhiễu loại trừ đáp án đúng hiện tại
-    let filteredPool = allAnswersPool.filter(ans => ans.toLowerCase() !== correctAnswer.toLowerCase());
     
-    // Xáo trộn kho lọc để lấy ngẫu nhiên 3 đáp án khác
-    filteredPool.sort(() => Math.random() - 0.5);
+    // Lọc kho đáp án ảo 'distractorPool', loại bỏ mọi đáp án nằm trong danh sách đen (allCorrectAnswers)
+    let safeDistractors = distractorPool.filter(ans => {
+        return !allCorrectAnswers.includes(ans.trim().toLowerCase());
+    });
     
-    for (let i = 0; i < Math.min(3, filteredPool.length); i++) {
-        options.push(filteredPool[i]);
+    // Xáo trộn ngẫu nhiên kho ảo an toàn này
+    safeDistractors.sort(() => Math.random() - 0.5);
+    
+    // Lấy 3 đáp án ảo lắp vào câu hỏi
+    for (let i = 0; i < 3; i++) {
+        if(safeDistractors[i]) {
+            options.push(safeDistractors[i]);
+        } else {
+            // Phòng hờ nếu kho distractorPool thiếu từ, tự tạo biến thể ngẫu nhiên không trùng
+            options.push("Option Alternative " + (i + 1)); 
+        }
     }
 
-    // Xáo trộn vị trí của 4 đáp án này để chống học vẹt vị trí nút
+    // Đảo vị trí 4 đáp án
     return options.sort(() => Math.random() - 0.5);
 }
 
-// Render danh sách câu hỏi ra giao diện trực quan
 function renderQuestions() {
     const quizBox = document.getElementById("quiz-box");
     quizBox.innerHTML = "";
 
     currentQuestions.forEach((qObj, qIndex) => {
-        // Nếu câu hỏi chưa có sẵn danh sách đáp án được trộn riêng (Ví dụ khi mới load hoặc sau khi bấm Trộn)
         if (!qObj.generatedOptions) {
             qObj.generatedOptions = generateOptions(qObj.a);
         }
@@ -589,7 +601,6 @@ function renderQuestions() {
             btn.className = "option-btn";
             btn.innerText = optionText;
             
-            // Xử lý sự kiện bấm chọn đáp án
             btn.onclick = () => checkAnswer(btn, optionText, qObj.a, qIndex, optionsGrid);
             optionsGrid.appendChild(btn);
         });
@@ -599,23 +610,17 @@ function renderQuestions() {
     });
 }
 
-// Xử lý Logic kiểm tra đáp án và Phản hồi màu sắc trực quan (Đỏ/Xanh)
 function checkAnswer(selectedBtn, selectedText, correctAnswer, qIndex, optionsGrid) {
     const allButtons = optionsGrid.querySelectorAll(".option-btn");
-    
-    // Vô hiệu hóa tất cả các nút trong câu hỏi này để không cho bấm lại
     allButtons.forEach(btn => btn.disabled = true);
 
     if (selectedText === correctAnswer) {
-        // ĐÚNG: Ô chuyển màu XANH LÁ
         selectedBtn.classList.add("correct");
         userScoreMap[qIndex] = true;
     } else {
-        // SAI: Ô bấm chuyển màu ĐỎ
         selectedBtn.classList.add("wrong");
         userScoreMap[qIndex] = false;
         
-        // Đồng thời tìm và tự động sáng màu XANH LÁ đáp án đúng để đối chiếu
         allButtons.forEach(btn => {
             if (btn.innerText === correctAnswer) {
                 btn.classList.add("correct");
@@ -626,7 +631,6 @@ function checkAnswer(selectedBtn, selectedText, correctAnswer, qIndex, optionsGr
     updateProgressBar();
 }
 
-// Cập nhật thanh tiến độ thực tế & Mở khóa chuyển quyển nghiêm ngặt
 function updateProgressBar() {
     const total = currentQuestions.length;
     if (total === 0) return;
@@ -641,7 +645,6 @@ function updateProgressBar() {
     progressBar.style.width = `${percentage}%`;
     progressText.innerText = `${correctCount}/${total} ĐÚNG`;
 
-    // Khóa trang nghiêm ngặt: Chỉ hiện nút Chuyển quyển khi thuộc lòng chính xác 100%
     if (correctCount === total) {
         btnNext.style.display = "block";
     } else {
@@ -649,33 +652,25 @@ function updateProgressBar() {
     }
 }
 
-// Tính năng Trộn câu hỏi (🎲): Xáo trộn đề và đảo luôn đáp án
 function shuffleCurrentBook() {
-    // Xáo trộn mảng câu hỏi hiện tại
     currentQuestions.sort(() => Math.random() - 0.5);
     
-    // Tạo lại bộ đáp án trộn hoàn toàn mới cho từng câu hỏi
     currentQuestions.forEach(qObj => {
         qObj.generatedOptions = generateOptions(qObj.a);
     });
 
-    // Reset lại điểm số câu trả lời của quyển này để kiểm tra lại từ đầu
     userScoreMap = {};
     currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
 
     renderQuestions();
     updateProgressBar();
-    
-    // Cuộn mượt lên đầu trang sau khi trộn đề thành công
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Chuyển sang quyển tiếp theo theo thứ tự tuyến tính
 function goToNextBook() {
     if (currentBookIndex < bookKeys.length - 1) {
         currentBookIndex++;
         loadBook(bookKeys[currentBookIndex]);
-        // Tự động cuộn mượt lên đầu trang mới
         window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
         alert("Chúc mừng bạn! Bạn đã xuất sắc hoàn thành tất cả các quyển bài tập PET/FCE!");
