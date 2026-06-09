@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Luyện Đáp Án Tiếng Anh PET - Part 2 (Q6-Q11)</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f7;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 15px;
+            border: none;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background-color: #dfe6e9;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(74, 144, 226, 0.3);
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .book-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-shuffle {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-shuffle:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .btn-next-book {
+            background-color: #9b59b6;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+            margin: 30px auto 10px auto;
+            display: none;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+            animation: bounce 2s infinite;
+        }
+
+        .btn-next-book:hover {
+            background-color: #8e44ad;
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background-color: var(--light-color);
+            border: 2px solid #e2e8f0;
+            padding: 12px 18px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            position: relative;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateX(5px);
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724 !important;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--error-color) !important;
+            color: #721c24 !important;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .progress-bar-container {
+            background: #dee2e6;
+            border-radius: 50px;
+            height: 10px;
+            width: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--success-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 600px) {
+            .tabs-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .control-panel {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HỆ THỐNG LUYỆN ĐÁP ÁN PET - PART 2</h1>
+    <p>Học thông minh - Thuộc lòng từ câu 6 đến câu 11 để vượt qua thử thách</p>
+    <div class="container" style="margin-top: 15px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:5px;">
+            <span>Tiến độ hoàn thành Quyển hiện tại:</span>
+            <span id="progress-text">0/0 ĐÚNG</span>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="tabs-container" id="tabs-box"></div>
+
+    <div class="control-panel">
+        <div class="book-title" id="current-book-title">Quyển Extra</div>
+        <button class="btn btn-shuffle" onclick="shuffleCurrentBook()">🎲 Trộn câu hỏi & Đáp án</button>
+    </div>
+
+    <div class="quiz-container" id="quiz-box"></div>
+
+    <div style="text-align: center; width: 100%;">
+        <button class="btn btn-next-book" id="btn-next" onclick="goToNextBook()">🚀 Tuyệt vời! Check chuyển sang Quyển tiếp theo</button>
+    </div>
+</div>
+
+<script>
+const rawData = {
+    "Quyển Extra": [
+        { "q": "Why is tonight’s disco special? (Câu 4)", "a": "It’s Sam’s birthday" },
+        { "q": "Question 6", "a": "Toby says that working in Oliver Rix’s restaurant kitchen was ….. very enjoyable" },
+        { "q": "Question 7", "a": "in a park" },
+        { "q": "Question 8", "a": "Celebrate on the beach" },
+        { "q": "Question 9", "a": "12:45" },
+        { "q": "Question 10", "a": "Drinks" },
+        { "q": "Question 11", "a": "Take photos" },
+        { "q": "Question 6 (Set 2)", "a": "Louise’s first job as a  . . . .secretary" },
+        { "q": "Question 7 (Set 2)", "a": "He couldn’t find anything" },
+        { "q": "Question 8 (Set 2)", "a": "Making them look good" },
+        { "q": "Question 9 (Set 2)", "a": "Food isn’t ready on time" },
+        { "q": "Question 10 (Set 2)", "a": "He teaches them many things" },
+        { "q": "Question 11 (Set 2)", "a": "Train with other chefs" },
+        { "q": "Question 6 (Set 3)", "a": "The music that the band plays is easy for everyone to dance to" },
+        { "q": "Question 7 (Set 3)", "a": "Studied the history of fashion" },
+        { "q": "Question 8 (Set 3)", "a": "Her parents saw her work" },
+        { "q": "Question 9 (Set 3)", "a": "Comfortable for everyone to wear" },
+        { "q": "Question 10 (Set 3)", "a": "In advertising" },
+        { "q": "Question 11 (Set 3)", "a": "Start a children’s clothes business" },
+        { "q": "Question 7 (Set 4)", "a": "All play music for pleasure" },
+        { "q": "Question 8 (Set 4)", "a": "You ask them before the party" },
+        { "q": "Question 9 (Set 4)", "a": "Twelve" },
+        { "q": "Question 10 (Set 4)", "a": "They were looking for a singer" },
+        { "q": "Question 11 (Set 4)", "a": "On a boat" }
+    ],
+    "Quyển 1": [
+        { "q": "When Nick and Mel were younger? (Câu 6)", "a": "Their father took them to live concerts." },
+        { "q": "Question 7", "a": "Were influenced by different kinds of music" },
+        { "q": "Question 8", "a": "Two other musicians heard Nick and Mel playing" },
+        { "q": "Question 9", "a": "Concert audiences liked their music" },
+        { "q": "Question 10", "a": "The older members look after him and Mel" },
+        { "q": "Question 11", "a": "A health problem delayed their album recording" },
+        { "q": "Simon’s mum decided to take him to… (Câu 6)", "a": "She had enjoyed going there" },
+        { "q": "Question 7 (Set 2)", "a": "disappointed to hear it was all indoors" },
+        { "q": "Question 8 (Set 2)", "a": "many different types of people" },
+        { "q": "Question 9 (Set 2)", "a": "He found the foot holes helpful" },
+        { "q": "Question 10 (Set 2)", "a": "He was slower than everyone else" },
+        { "q": "Question 11 (Set 2)", "a": "to think before he does something." },
+        { "q": "Abby first decide to go surfing when .. (Câu 6)", "a": "She saw some local competitions" },
+        { "q": "Question 7 (Set 3)", "a": "It was good to try different surfboards" },
+        { "q": "Question 8 (Set 3)", "a": "The sea is warm enough where she lives" },
+        { "q": "Question 9 (Set 3)", "a": "Worries at first by the size of the waves" },
+        { "q": "Question 10 (Set 3)", "a": "Learn to surf in different conditions" },
+        { "q": "Question 11 (Set 3)", "a": "Find out about surfing as a career" },
+        { "q": "Maria decided to take up Gymnastics .. (Câu 6)", "a": "At a gymnastics competition" },
+        { "q": "Question 7 (Set 4)", "a": "When a well- known" },
+        { "q": "Question 8 (Set 4)", "a": "She believes She’s sensible" },
+        { "q": "Question 9 (Set 4)", "a": "She has little time" },
+        { "q": "Question 10 (Set 4)", "a": "Make videos" },
+        { "q": "Question 11 (Set 4)", "a": "A picture of herself" }
+    ],
+    "Quyển 2": [
+        { "q": "The week’s prize is. . . (Câu 6)", "a": "a classical CD" },
+        { "q": "Question 7", "a": "Spain" },
+        { "q": "Question 8", "a": "a play" },
+        { "q": "Question 9", "a": "Some left before the end" },
+        { "q": "Question 10", "a": "used in advertising" },
+        { "q": "Question 11", "a": "0018937224" },
+        { "q": "The festival takes place from . .. (Câu 6)", "a": "12 to 28 May" },
+        { "q": "Question 7 (Set 2)", "a": "Opera" },
+        { "q": "Question 8 (Set 2)", "a": "Wine and sandwiches" },
+        { "q": "Question 9 (Set 2)", "a": "Music" },
+        { "q": "Question 10 (Set 2)", "a": "A walk and a concert" },
+        { "q": "Question 11 (Set 2)", "a": "By post" },
+        { "q": "If you want to apply . . .. (Câu 6)", "a": "Speak more than on language" },
+        { "q": "Question 7 (Set 3)", "a": "Mix with other nationalities" },
+        { "q": "Question 8 (Set 3)", "a": "Able to mix well" },
+        { "q": "Question 9 (Set 3)", "a": "Pictures" },
+        { "q": "Question 10 (Set 3)", "a": "Join in performance" },
+        { "q": "Question 11 (Set 3)", "a": "Before the camp starts" },
+        { "q": "The speaker says. . . . (Câu 6)", "a": "most people" },
+        { "q": "Question 7 (Set 4)", "a": "Individually made" },
+        { "q": "Question 8 (Set 4)", "a": "Change people’s idea" },
+        { "q": "Question 9 (Set 4)", "a": "Clothes started to cost less" },
+        { "q": "Question 10 (Set 4)", "a": "Loner skirts" },
+        { "q": "Question 11 (Set 4)", "a": "Fashion for the future" }
+    ],
+    "Quyển 3": [
+        { "q": "The railway princess is on television from (Câu 6)", "a": "9 – 10.30" },
+        { "q": "Question 7", "a": "At lunch time" },
+        { "q": "Question 8", "a": "Brazil and Ireland" },
+        { "q": "Question 9", "a": "Tennis" },
+        { "q": "Question 10", "a": "The year" },
+        { "q": "Question 11", "a": "A musical" },
+        { "q": "The shopping center opened (Câu 6)", "a": "three weeks ago" },
+        { "q": "Question 7 (Set 2)", "a": "Car" },
+        { "q": "Question 8 (Set 2)", "a": "10 to 9" },
+        { "q": "Question 9 (Set 2)", "a": "Watch a film" },
+        { "q": "Question 10 (Set 2)", "a": "Go sailing" },
+        { "q": "Question 11 (Set 2)", "a": "There was nowhere" },
+        { "q": "The concert starts at 7.30 pm (Câu 6)", "a": "7.30 pm" },
+        { "q": "Question 7 (Set 3)", "a": "Some school sports equipment" },
+        { "q": "Question 8 (Set 3)", "a": "In the car park by the lake" },
+        { "q": "Question 9 (Set 3)", "a": "In the library" },
+        { "q": "Question 10 (Set 3)", "a": "A recent journey she has made" },
+        { "q": "Question 11 (Set 3)", "a": "Book a ticket" },
+        { "q": "There are still tickets for Spider and Rose (Câu 6)", "a": "Spider and Rose" },
+        { "q": "Question 7 (Set 4)", "a": "They want free time" },
+        { "q": "Question 8 (Set 4)", "a": "The Russian ballet exhibition" },
+        { "q": "Question 9 (Set 4)", "a": "Close to the Art center" },
+        { "q": "Question 10 (Set 4)", "a": "Charlie’s" },
+        { "q": "Question 11 (Set 4)", "a": "10.20" }
+    ],
+    "Quyển 4": [
+        { "q": "The main reason for Angela’s trip was to (Câu 6)", "a": "Make money for other people" },
+        { "q": "Question 7", "a": "She like to be active" },
+        { "q": "Question 8", "a": "She got to know her teacher well" },
+        { "q": "Question 9", "a": "Did very little sightseeing" },
+        { "q": "Question 10", "a": "Watching the changes" },
+        { "q": "Question 11", "a": "Regular exercise" },
+        { "q": "How often does Sarah paint now? (Câu 6)", "a": "Three days a week" },
+        { "q": "Question 7 (Set 2)", "a": "Pay for her artist’s material" },
+        { "q": "Question 8 (Set 2)", "a": "Drew scenes in pencil" },
+        { "q": "Question 9 (Set 2)", "a": "Meeting other artists" },
+        { "q": "Question 10 (Set 2)", "a": "Painted people" },
+        { "q": "Question 11 (Set 2)", "a": "Have a break" },
+        { "q": "To really understand My life you need to (Câu 6)", "a": "Read the writer’s other books" },
+        { "q": "Question 7 (Set 3)", "a": "His father has to be close to his work" },
+        { "q": "Question 8 (Set 3)", "a": "The information is unsuitable" },
+        { "q": "Question 9 (Set 3)", "a": "She now like cooking" },
+        { "q": "Question 10 (Set 3)", "a": "The maps are not very good" },
+        { "q": "Question 11 (Set 3)", "a": "Are planning to buy presents" },
+        { "q": "For his most recent television programme, John (Câu 6)", "a": "Went to Pacific ocean" },
+        { "q": "Question 7 (Set 4)", "a": "They are too tiring" },
+        { "q": "Question 8 (Set 4)", "a": "old ruins in Wales" },
+        { "q": "Question 9 (Set 4)", "a": "Be brave about traveling to new places" },
+        { "q": "Question 10 (Set 4)", "a": "His family might need him" },
+        { "q": "Question 11 (Set 4)", "a": "Travel books" }
+    ],
+    "Quyển 5": [
+        { "q": "How long has Britta lived in Berlin? (Câu 6)", "a": "Four years" },
+        { "q": "Question 7", "a": "She likes living in a big, busy city" },
+        { "q": "Question 8", "a": "A good place to eat out" },
+        { "q": "Question 9", "a": "She uses her bicycle" },
+        { "q": "Question 10", "a": "To a gallery with her" },
+        { "q": "Question 11", "a": "Live near her" },
+        { "q": "The first old ship which Frank found was (Câu 6)", "a": "Easy to find" },
+        { "q": "Question 7 (Set 2)", "a": "Uses the latest equipment" },
+        { "q": "Question 8 (Set 2)", "a": "It sank in a storm" },
+        { "q": "Question 9 (Set 2)", "a": "Was made from gold he found himself" },
+        { "q": "Question 10 (Set 2)", "a": "Sell some of his collection" },
+        { "q": "Question 11 (Set 2)", "a": "By joining" },
+        { "q": "Before her children were born, Rachel worked as (Câu 6)", "a": "A painter" },
+        { "q": "Question 7 (Set 3)", "a": "Rachel’s husband" },
+        { "q": "Question 8 (Set 3)", "a": "Performing in the show" },
+        { "q": "Question 9 (Set 3)", "a": "The children were frightened" },
+        { "q": "Question 10 (Set 3)", "a": "She enjoys doing them so much" },
+        { "q": "Question 11 (Set 3)", "a": "They give her their opinion" },
+        { "q": "Why did Paul choose the part of Africa he visited? (Câu 6)", "a": "It will soon change" },
+        { "q": "Question 7 (Set 4)", "a": "Clearing paths through the forest" },
+        { "q": "Question 8 (Set 4)", "a": "Being responsible for a team" },
+        { "q": "Question 9 (Set 4)", "a": "Some people ate" },
+        { "q": "Question 10 (Set 4)", "a": "He helped one of them who was ill" },
+        { "q": "Question 11 (Set 4)", "a": "He thinks the trip was a valuable experience" }
+    ],
+    "Quyển 6": [
+        { "q": "Where is Angela working at the moment? (Câu 6)", "a": "Britain" },
+        { "q": "Question 7", "a": "enjoys" },
+        { "q": "Question 8", "a": "furniture" },
+        { "q": "Question 9", "a": "8g30" },
+        { "q": "Question 10", "a": "At her sister’s house" },
+        { "q": "Question 11", "a": "sailing" },
+        { "q": "Where is the town of Swanton located? (Câu 6)", "a": "Near the sea" },
+        { "q": "Question 7 (Set 2)", "a": "opportunities" },
+        { "q": "Question 8 (Set 2)", "a": "An art center" },
+        { "q": "Question 9 (Set 2)", "a": "There are few wild birds" },
+        { "q": "Question 10 (Set 2)", "a": "Thinks" },
+        { "q": "Question 11 (Set 2)", "a": "successful" },
+        { "q": "Elena decided to become a dancer when she was (Câu 6)", "a": "9" },
+        { "q": "Question 7 (Set 3)", "a": "learned to be independent" },
+        { "q": "Question 8 (Set 3)", "a": "children will enjoy" },
+        { "q": "Question 9 (Set 3)", "a": "go shopping" },
+        { "q": "Question 10 (Set 3)", "a": "give them a flower" },
+        { "q": "Question 11 (Set 3)", "a": "doing something she loves" },
+        { "q": "How long has Sarah worked as a weather forecast? (Câu 6)", "a": "7 years" },
+        { "q": "Question 7 (Set 4)", "a": "sometimes has to work at night" },
+        { "q": "Question 8 (Set 4)", "a": "prepares it in advance" },
+        { "q": "Question 9 (Set 4)", "a": "spends a lot of time" },
+        { "q": "Question 10 (Set 4)", "a": "took part in along race." },
+        { "q": "Question 11 (Set 4)", "a": "a photo" }
+    ],
+    "Quyển 7": [
+        { "q": "What was Robin’s job in Argentina? (Câu 6)", "a": "travelling salesman" },
+        { "q": "Question 7", "a": "suitable for what he planned" },
+        { "q": "Question 8", "a": "a picture" },
+        { "q": "Question 9", "a": "he wanted to get up and dance" },
+        { "q": "Question 10", "a": "he went on a river trip" },
+        { "q": "Question 11", "a": "the peace" },
+        { "q": "Harry first became . . . (Câu 6)", "a": "talk a lot about" },
+        { "q": "Question 7 (Set 2)", "a": "wanted to share his experience" },
+        { "q": "Question 8 (Set 2)", "a": "a customer" },
+        { "q": "Question 9 (Set 2)", "a": "avoid damaging the area" },
+        { "q": "Question 10 (Set 2)", "a": "it’s part of his job" },
+        { "q": "Question 11 (Set 2)", "a": "the building" },
+        { "q": "Linda worked in a cake shop because (Câu 6)", "a": "her parents didn’t give her enough money" },
+        { "q": "Question 7 (Set 3)", "a": "was kind to her" },
+        { "q": "Question 8 (Set 3)", "a": "the smell of baking" },
+        { "q": "Question 9 (Set 3)", "a": "making sandwiches" },
+        { "q": "Question 10 (Set 3)", "a": "hadn't got the same skill" },
+        { "q": "Question 11 (Set 3)", "a": "She enjoyed the busy part of the day" },
+        { "q": "What does lucy usually paint? (Câu 6)", "a": "scenery for stage plays" },
+        { "q": "Question 7 (Set 4)", "a": "she thought it would be interesting" },
+        { "q": "Question 8 (Set 4)", "a": "some days are too busy" },
+        { "q": "Question 9 (Set 4)", "a": "eleven" },
+        { "q": "Question 10 (Set 4)", "a": "public transport" },
+        { "q": "Question 11 (Set 4)", "a": "she studies" }
+    ],
+    "Quyển 8": [
+        { "q": "What does Tim enjoy most about his job? (Câu 6)", "a": "Listening to lots of music" },
+        { "q": "Question 7", "a": "need to fill an online" },
+        { "q": "Question 8", "a": "Usually enjoy themselves" },
+        { "q": "Question 9", "a": "is convenient for public" },
+        { "q": "Question 10", "a": "Students keeps them" },
+        { "q": "Question 11", "a": "it needs" },
+        { "q": "What did Marta . . . (Câu 6)", "a": "the boss didn’t listen to her" },
+        { "q": "Question 7 (Set 2)", "a": "They are only advertised online" },
+        { "q": "Question 8 (Set 2)", "a": "finding that waiter" },
+        { "q": "Question 9 (Set 2)", "a": "The wind" },
+        { "q": "Question 10 (Set 2)", "a": "The is a lack of space" },
+        { "q": "Question 11 (Set 2)", "a": "the wrong people" },
+        { "q": "Why did Jack take photographs (Câu 6)", "a": "the colour were exciting" },
+        { "q": "Question 7 (Set 3)", "a": "he was trying clear" },
+        { "q": "Question 8 (Set 3)", "a": "Unsure how" },
+        { "q": "Question 9 (Set 3)", "a": "The quality was so high" },
+        { "q": "Question 10 (Set 3)", "a": "Travel to different country" },
+        { "q": "Question 11 (Set 3)", "a": "get the same time" },
+        { "q": "Amy decided to become? (Câu 6)", "a": "she was working" },
+        { "q": "Question 7 (Set 4)", "a": "understanding how" },
+        { "q": "Question 8 (Set 4)", "a": "Having her name" },
+        { "q": "Question 9 (Set 4)", "a": "She feels clothes" },
+        { "q": "Question 10 (Set 4)", "a": "seeing things around her" },
+        { "q": "Question 11 (Set 4)", "a": "a collection" }
+    ]
+};
+
+// Thu thập TẤT CẢ các đáp án đúng của hệ thống để làm danh sách đen loại trừ
+let allCorrectAnswers = [];
+for (let book in rawData) {
+    rawData[book].forEach(item => {
+        if (!allCorrectAnswers.includes(item.a.trim().toLowerCase())) {
+            allCorrectAnswers.push(item.a.trim().toLowerCase());
+        }
+    });
+}
+
+// Bổ sung kho dữ liệu đáp án ảo phong phú, không trùng bất cứ đáp án thật nào
+const distractorPool = [
+    "At a local community center", "They prefer classical violin", "In the main city library", 
+    "It was postponed due to bad weather", "By taking a taxi or walking", "He felt very tired and bored", 
+    "She dropped her passport on the way", "On a rainy Thursday morning", "A complete waste of time", 
+    "Working with strict managers", "The flight was delayed by two hours", "In an ancient historical museum", 
+    "Learning foreign languages easily", "They didn't like the main actor", "At half past nine (9:30)", 
+    "Because the prices were too high", "A modern art collection", "To practice swimming skills", 
+    "Near the central railway station", "With some fresh strawberries"
+];
+
+const bookKeys = Object.keys(rawData);
+let currentBookIndex = 0;
+let currentQuestions = [];
+let userScoreMap = {};
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderTabs();
+    loadBook(bookKeys[0]);
+});
+
+function renderTabs() {
+    const tabsBox = document.getElementById("tabs-box");
+    tabsBox.innerHTML = "";
+    bookKeys.forEach((bookName, index) => {
+        const btn = document.createElement("button");
+        btn.className = `tab-btn ${index === currentBookIndex ? 'active' : ''}`;
+        btn.innerText = bookName;
+        btn.onclick = () => {
+            currentBookIndex = index;
+            loadBook(bookName);
+        };
+        tabsBox.appendChild(btn);
+    });
+}
+
+function loadBook(bookName) {
+    document.getElementById("current-book-title").innerText = bookName;
+    
+    const tabs = document.querySelectorAll(".tab-btn");
+    tabs.forEach((tab, idx) => {
+        if (idx === currentBookIndex) tab.classList.add("active");
+        else tab.classList.remove("active");
+    });
+
+    currentQuestions = JSON.parse(JSON.stringify(rawData[bookName]));
+    
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+}
+
+function generateOptions(correctAnswer) {
+    let options = [correctAnswer];
+    
+    let safeDistractors = distractorPool.filter(ans => {
+        return !allCorrectAnswers.includes(ans.trim().toLowerCase()) && ans.trim().toLowerCase() !== correctAnswer.trim().toLowerCase();
+    });
+    
+    safeDistractors.sort(() => Math.random() - 0.5);
+    
+    for (let i = 0; i < 3; i++) {
+        if(safeDistractors[i]) {
+            options.push(safeDistractors[i]);
+        } else {
+            options.push("Alternative Answer Choice " + (i + 1)); 
+        }
+    }
+
+    return options.sort(() => Math.random() - 0.5);
+}
+
+function renderQuestions() {
+    const quizBox = document.getElementById("quiz-box");
+    quizBox.innerHTML = "";
+
+    currentQuestions.forEach((qObj, qIndex) => {
+        if (!qObj.generatedOptions) {
+            qObj.generatedOptions = generateOptions(qObj.a);
+        }
+
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.id = `q-card-${qIndex}`;
+
+        const qText = document.createElement("div");
+        qText.className = "question-text";
+        qText.innerText = qObj.q.includes("Câu") || qObj.q.includes("Question") ? `${qObj.q}:` : `Câu ${qIndex + 1}: ${qObj.q}`;
+        card.appendChild(qText);
+
+        const optionsGrid = document.createElement("div");
+        optionsGrid.className = "options-grid";
+
+        qObj.generatedOptions.forEach(optionText => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = optionText;
+            
+            btn.onclick = () => checkAnswer(btn, optionText, qObj.a, qIndex, optionsGrid);
+            optionsGrid.appendChild(btn);
+        });
+
+        card.appendChild(optionsGrid);
+        quizBox.appendChild(card);
+    });
+}
+
+function checkAnswer(selectedBtn, selectedText, correctAnswer, qIndex, optionsGrid) {
+    const allButtons = optionsGrid.querySelectorAll(".option-btn");
+    allButtons.forEach(btn => btn.disabled = true);
+
+    if (selectedText === correctAnswer) {
+        selectedBtn.classList.add("correct");
+        userScoreMap[qIndex] = true;
+    } else {
+        selectedBtn.classList.add("wrong");
+        userScoreMap[qIndex] = false;
+        
+        allButtons.forEach(btn => {
+            if (btn.innerText === correctAnswer) {
+                btn.classList.add("correct");
+            }
+        });
+    }
+
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const total = currentQuestions.length;
+    if (total === 0) return;
+
+    const correctCount = Object.values(userScoreMap).filter(val => val === true).length;
+    const percentage = (correctCount / total) * 100;
+
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+    const btnNext = document.getElementById("btn-next");
+
+    progressBar.style.width = `${percentage}%`;
+    progressText.innerText = `${correctCount}/${total} ĐÚNG`;
+
+    if (correctCount === total) {
+        btnNext.style.display = "block";
+    } else {
+        btnNext.style.display = "none";
+    }
+}
+
+function shuffleCurrentBook() {
+    currentQuestions.sort(() => Math.random() - 0.5);
+    
+    currentQuestions.forEach(qObj => {
+        qObj.generatedOptions = generateOptions(qObj.a);
+    });
+
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToNextBook() {
+    if (currentBookIndex < bookKeys.length - 1) {
+        currentBookIndex++;
+        loadBook(bookKeys[currentBookIndex]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        alert("Chúc mừng bạn! Bạn đã xuất sắc hoàn thành toàn bộ các quyển bài tập PET!");
+    }
+}
+</script>
+
+</body>
+</html>
