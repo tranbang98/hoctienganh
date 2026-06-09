@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Luyện Đáp Án Tiếng Anh PET - Part 4 (Q11-Q16)</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --border-radius: 12px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f7;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1abc9c, #16a085);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .nav-back {
+            margin-bottom: 15px;
+        }
+
+        .nav-back a {
+            text-decoration: none;
+            color: #7f8c8d;
+            font-weight: bold;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 10px 15px;
+            border: none;
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .tab-btn:hover {
+            background-color: #dfe6e9;
+        }
+
+        .tab-btn.active {
+            background-color: #1abc9c;
+            color: white;
+            box-shadow: 0 4px 10px rgba(26, 188, 156, 0.3);
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .book-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #16a085;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-shuffle {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .btn-shuffle:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+
+        .btn-next-book {
+            background-color: #9b59b6;
+            color: white;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+            margin: 30px auto 10px auto;
+            display: none;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+            animation: bounce 2s infinite;
+        }
+
+        .btn-next-book:hover {
+            background-color: #8e44ad;
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .context-header {
+            background-color: #eaeded;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 12px;
+            border-left: 3px solid #7f8c8d;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 5px solid #1abc9c;
+            transition: var(--transition);
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: var(--light-color);
+            border: 2px solid #e2e8f0;
+            padding: 14px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724 !important;
+        }
+
+        .option-btn.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--error-color) !important;
+            color: #721c24 !important;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .progress-bar-container {
+            background: #dee2e6;
+            border-radius: 50px;
+            height: 10px;
+            width: 100%;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--success-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @media (max-width: 600px) {
+            .tabs-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+            .control-panel {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>HỆ THỐNG LUYỆN ĐÁP ÁN PET - PART 4</h1>
+    <p>Dạng bài Correct / Incorrect (Từ câu 11 đến câu 16) - Chống vẹt tuyệt đối</p>
+    <div class="container" style="margin-top: 15px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:5px;">
+            <span>Tiến độ hoàn thành Quyển:</span>
+            <span id="progress-text">0/0 ĐÚNG</span>
+        </div>
+        <div class="progress-bar-container">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="nav-back">
+        <a href="index.html">⬅ Quay lại Trang chủ (Part 1)</a>
+    </div>
+
+    <div class="tabs-container" id="tabs-box"></div>
+
+    <div class="control-panel">
+        <div class="book-title" id="current-book-title">Quyển Extra</div>
+        <button class="btn btn-shuffle" onclick="shuffleCurrentBook()">🎲 Trộn câu hỏi</button>
+    </div>
+
+    <div class="quiz-container" id="quiz-box"></div>
+
+    <div style="text-align: center; width: 100%;">
+        <button class="btn btn-next-book" id="btn-next" onclick="goToNextBook()">🚀 Tuyệt vời! Check chuyển sang Quyển tiếp theo</button>
+    </div>
+</div>
+
+<script>
+const rawData = {
+    "Quyển Extra": [
+        { "ctx": "Mary and her father about computer", "num": 11, "q": "This is the first time that Mary’s father has used the computer", "a": "Incorrect" },
+        { "ctx": "Mary and her father about computer", "num": 12, "q": "There is a fault with the computer", "a": "Incorrect" },
+        { "ctx": "Mary and her father about computer", "num": 13, "q": "Mary thinks people learn new skill best when they are young", "a": "Correct" },
+        { "ctx": "Mary and her father about computer", "num": 14, "q": "Mary and her father agrees that the instructions are badly written", "a": "Correct" },
+        { "ctx": "Mary and her father about computer", "num": 15, "q": "Mary’s father is persuaded to go to computer classes", "a": "Correct" },
+        { "ctx": "Mary and her father about computer", "num": 16, "q": "Mary knows a lot about computer teaching in different countries", "a": "Incorrect" },
+        { "ctx": "Charlotte and her father about next year study", "num": 11, "q": "Charlotte wants to study Spanish because she thinks Spanish grammar is easy", "a": "Incorrect" },
+        { "ctx": "Charlotte and her father about next year study", "num": 12, "q": "Charlotte’s Grandmother was born in England", "a": "Correct" },
+        { "ctx": "Charlotte and her father about next year study", "num": 13, "q": "Charlotte’s father is sorry he can’s speak Chinese", "a": "Correct" },
+        { "ctx": "Charlotte and her father about next year study", "num": 14, "q": "Charlotte’s father is keen on her studying in China", "a": "Incorrect" },
+        { "ctx": "Charlotte and her father about next year study", "num": 15, "q": "Charlotte plans to go to China alone", "a": "Incorrect" },
+        { "ctx": "Charlotte and her father about next year study", "num": 16, "q": "Charlotte and her father agree that he mother wants to visit China", "a": "Correct" },
+        { "ctx": "Tony and Rachel about watching television", "num": 11, "q": "Tony and Rachel both dislike watching cartoons", "a": "Correct" },
+        { "ctx": "Tony and Rachel about watching television", "num": 12, "q": "Tony and Rachel both prefer watching television alone", "a": "Incorrect" },
+        { "ctx": "Tony and Rachel about watching television", "num": 13, "q": "Rachel thinks her mother can afford to buy her a television", "a": "Correct" },
+        { "ctx": "Tony and Rachel about watching television", "num": 14, "q": "Tony has kept his promise about watching television at night", "a": "Incorrect" },
+        { "ctx": "Tony and Rachel about watching television", "num": 15, "q": "Rachel wants to be able to choose when she watches television", "a": "Correct" },
+        { "ctx": "Tony and Rachel about watching television", "num": 16, "q": "Tony agrees with his parents’ attitude towards homework", "a": "Correct" },
+        { "ctx": "Jack and Sarah about learning to drive", "num": 11, "q": "Jack thinks that his driving teacher’s instructions are clear", "a": "Correct" },
+        { "ctx": "Jack and Sarah about learning to drive", "num": 12, "q": "Sarah agrees that learning to brake quickly is difficult", "a": "Correct" },
+        { "ctx": "Jack and Sarah about learning to drive", "num": 13, "q": "Jack thinks he will be nervous on the day of the test", "a": "Incorrect" },
+        { "ctx": "Jack and Sarah about learning to drive", "num": 14, "q": "Sarah feels sure that Jack will pass his driving test", "a": "Incorrect" },
+        { "ctx": "Jack and Sarah about learning to drive", "num": 15, "q": "Sarah allow other people to drive her car", "a": "Correct" },
+        { "ctx": "Jack and Sarah about learning to drive", "num": 16, "q": "Jack intends to save his money to buy his own car", "a": "Incorrect" }
+    ],
+    "Quyển 1": [
+        { "ctx": "Ruby and Thomas talking about a poster", "num": 11, "q": "Ruby realises that the first design of the poster may need improving", "a": "Incorrect" },
+        { "ctx": "Ruby and Thomas talking about a poster", "num": 12, "q": "Thomas thinks the poster should be bigger than last year’s", "a": "Incorrect" },
+        { "ctx": "Ruby and Thomas talking about a poster", "num": 13, "q": "Ruby and Thomas agree that the poster should be in color", "a": "Incorrect" },
+        { "ctx": "Ruby and Thomas talking about a poster", "num": 14, "q": "Ruby thinks the photograph should be in the middle of the poster", "a": "Correct" },
+        { "ctx": "Ruby and Thomas talking about a poster", "num": 15, "q": "Thomas suggests they use the same photograph as last year", "a": "Incorrect" },
+        { "ctx": "Ruby and Thomas talking about a poster", "num": 16, "q": "Ruby thinks every word in the poster should be the same size", "a": "Correct" },
+        { "ctx": "Miranda and Jamie talking about sharing a room", "num": 11, "q": "Miranda accepts what her sister’s side of the room looks like", "a": "Correct" },
+        { "ctx": "Miranda and Jamie talking about sharing a room", "num": 12, "q": "Jamie complains that his brother refuses to share his electronic equipment", "a": "Correct" },
+        { "ctx": "Miranda and Jamie talking about sharing a room", "num": 13, "q": "Miranda is annoyed about something that her sister tells their mother", "a": "Incorrect" },
+        { "ctx": "Miranda and Jamie talking about sharing a room", "num": 14, "q": "Miranda was surprised that she felt lonely when her sister was away", "a": "Incorrect" },
+        { "ctx": "Miranda and Jamie talking about sharing a room", "num": 15, "q": "Despite sharing a bed room Jamie finds he can still easily do his homework", "a": "Correct" },
+        { "ctx": "Miranda and Jamie talking about sharing a room", "num": 16, "q": "Jamie and Miranda can both share problems with their brother or sister", "a": "Incorrect" },
+        { "ctx": "Lisa and Sam talking about a book", "num": 11, "q": "Lisa dislikes the book when she first started reading it", "a": "Incorrect" },
+        { "ctx": "Lisa and Sam talking about a book", "num": 12, "q": "Sam and Lisa felt sorry for Paul", "a": "Correct" },
+        { "ctx": "Lisa and Sam talking about a book", "num": 13, "q": "Sam was interested in the mystery", "a": "Incorrect" },
+        { "ctx": "Lisa and Sam talking about a book", "num": 14, "q": "Lisa thought the author helped the reader", "a": "Correct" },
+        { "ctx": "Lisa and Sam talking about a book", "num": 15, "q": "Sam wish there was more information", "a": "Correct" },
+        { "ctx": "Lisa and Sam talking about a book", "num": 16, "q": "Lisa liked the way the author", "a": "Incorrect" },
+        { "ctx": "Lucas and Claire talking about a band concert", "num": 11, "q": "Claire could see the band clearly from where she sat.", "a": "Correct" },
+        { "ctx": "Lucas and Claire talking about a band concert", "num": 12, "q": "Lucas thinks Candy Floss gave a great performance during the concert.", "a": "Correct" },
+        { "ctx": "Lucas and Claire talking about a band concert", "num": 13, "q": "Claire feels the band’s dancing was better in the summer.", "a": "Incorrect" },
+        { "ctx": "Lucas and Claire talking about a band concert", "num": 14, "q": "Lucas and Claire have the same opinion about the band’s costumes.", "a": "Incorrect" },
+        { "ctx": "Lucas and Claire talking about a band concert", "num": 15, "q": "Claire is planning to buy the next album by Candy Floss.", "a": "Correct" }
+    ],
+    "Quyển 2": [
+        { "ctx": "Jim and his mother", "num": 11, "q": "Jim’s bicycle needs to be mended", "a": "Correct" },
+        { "ctx": "Jim and his mother", "num": 12, "q": "He’s keen on to start saving money", "a": "Incorrect" },
+        { "ctx": "Jim and his mother", "num": 13, "q": "he mother thinks a mountain bike is suitable for their area", "a": "Incorrect" },
+        { "ctx": "Jim and his mother", "num": 14, "q": "She encourages Jim to manage his money better", "a": "Correct" },
+        { "ctx": "Jim and his mother", "num": 15, "q": "His mother offers to lend him some money", "a": "Incorrect" },
+        { "ctx": "Jim and his mother", "num": 16, "q": "Jim is disappointed by his mother’s suggestion", "a": "Correct" },
+        { "ctx": "Kate and George", "num": 11, "q": "Kate has stopped taking her medicine", "a": "Incorrect" },
+        { "ctx": "Kate and George", "num": 12, "q": "George thinks ate should stay away from home", "a": "Correct" },
+        { "ctx": "Kate and George", "num": 13, "q": "Kate had an accident on her bike last week", "a": "Incorrect" },
+        { "ctx": "Kate populations and George", "num": 14, "q": "George thinks Mr Gray is a lazy lecturer", "a": "Correct" },
+        { "ctx": "Kate and George", "num": 15, "q": "Kate will miss three lectures", "a": "Correct" },
+        { "ctx": "Kate and George", "num": 16, "q": "Kate want to stay at home at the weekend", "a": "Incorrect" },
+        { "ctx": "A father and his daughter Sonia", "num": 11, "q": "Sonia would like a car for her birthday", "a": "Incorrect" },
+        { "ctx": "A father and his daughter Sonia", "num": 12, "q": "Sonia’s friend Maria has her own car", "a": "Incorrect" },
+        { "ctx": "A father and his daughter Sonia", "num": 13, "q": "Sonia has talked to Maria about learning to drive", "a": "Correct" },
+        { "ctx": "A father and his daughter Sonia", "num": 14, "q": "Sonia offers to get a job at weekends", "a": "Correct" },
+        { "ctx": "A father and his daughter Sonia", "num": 15, "q": "Sonia’s father understands how his daughter feels", "a": "Correct" },
+        { "ctx": "A father and his daughter Sonia", "num": 16, "q": "Sonia suggests cooking a meal on her birthday", "a": "Incorrect" },
+        { "ctx": "A man and a woman at home", "num": 11, "q": "The man wants to spends the evening at home", "a": "Incorrect" },
+        { "ctx": "A man and a woman at home", "num": 12, "q": "The woman suggests they hire a video", "a": "Correct" },
+        { "ctx": "A man and a woman at home", "num": 13, "q": "They both want to see something light", "a": "Incorrect" },
+        { "ctx": "A man and a woman at home", "num": 14, "q": "The woman only wants to see a film once", "a": "Correct" },
+        { "ctx": "A man and a woman at home", "num": 15, "q": "In the end they decide to watch a video", "a": "Correct" },
+        { "ctx": "A man and a woman at home", "num": 16, "q": "The man offers to prepare some food", "a": "Correct" }
+    ],
+    "Quyển 3": [
+        { "ctx": "A girl Jane and her brother Michael", "num": 11, "q": "This will be the Sanchez family’s first trip to England", "a": "Correct" },
+        { "ctx": "A girl Jane and her brother Michael", "num": 12, "q": "Michael suggests sightseeing in London", "a": "Correct" },
+        { "ctx": "A girl Jane and her brother Michael", "num": 13, "q": "The Sanchez children are teenagers", "a": "Incorrect" },
+        { "ctx": "A girl Jane and her brother Michael", "num": 14, "q": "Jane has been to the car museum", "a": "Correct" },
+        { "ctx": "A girl Jane and her brother Michael", "num": 15, "q": "Michael thinks everyone enjoys visiting museum", "a": "Incorrect" },
+        { "ctx": "A girl Jane and her brother Michael", "num": 16, "q": "Jane and Michael have bought tickets for the tennis competition", "a": "Incorrect" },
+        { "ctx": "Mathew and his mother", "num": 11, "q": "Mathew had intended to catch the bus this morning", "a": "Incorrect" },
+        { "ctx": "Mathew and his mother", "num": 12, "q": "Mathew thought his mother knew he wanted the car this morning", "a": "Correct" },
+        { "ctx": "Mathew and his mother", "num": 13, "q": "Mathew is going to help Alan to repair his car", "a": "Incorrect" },
+        { "ctx": "Mathew and his mother", "num": 14, "q": "Mathew needs the car next Wednesday", "a": "Incorrect" },
+        { "ctx": "Mathew and his mother", "num": 15, "q": "Mathew’s mother agrees she made a mistake", "a": "Correct" },
+        { "ctx": "Mathew and his mother", "num": 16, "q": "Mathew has the car in the end", "a": "Correct" },
+        { "ctx": "A boy John and a girl Louise", "num": 11, "q": "John hopes to keep his singing lessons a secret", "a": "Incorrect" },
+        { "ctx": "A boy John and a girl Louise", "num": 12, "q": "John says he has had singing lessons before", "a": "Correct" },
+        { "ctx": "A boy John and a girl Louise", "num": 13, "q": "John and Luise agree that the teacher is strict", "a": "Correct" },
+        { "ctx": "A boy John and a girl Louise", "num": 14, "q": "John has always liked musical shows", "a": "Incorrect" },
+        { "ctx": "A boy John and a girl Louise", "num": 15, "q": "John was pleased with the practice show", "a": "Correct" },
+        { "ctx": "A boy John and a girl Louise", "num": 16, "q": "Luise would like to dance in a musical show", "a": "Incorrect" },
+        { "ctx": "Mike and his sister Ann", "num": 11, "q": "Mike likes to plan ahead more than Ann does", "a": "Correct" },
+        { "ctx": "Mike and his sister Ann", "num": 12, "q": "Ann thinks they should buy a useful present", "a": "Incorrect" },
+        { "ctx": "Mike and his sister Ann", "num": 13, "q": "Mike thinks he should choose the present", "a": "Correct" },
+        { "ctx": "Mike and his sister Ann", "num": 14, "q": "Mike has known Tony the longest", "a": "Incorrect" },
+        { "ctx": "Mike and his sister Ann", "num": 15, "q": "Mike thinks he will enjoy the wedding", "a": "Correct" },
+        { "ctx": "Mike and his sister Ann", "num": 16, "q": "Ann prefers large wedding", "a": "Incorrect" }
+    ],
+    "Quyển 4": [
+        { "ctx": "Tom and his sister Clare", "num": 11, "q": "Clare thinks their father will be pleased by Tom’s new plan", "a": "Incorrect" },
+        { "ctx": "Tom and his sister Clare", "num": 12, "q": "Tom believes he can manage both swimming and school work", "a": "Correct" },
+        { "ctx": "Tom and his sister Clare", "num": 13, "q": "Tom’s teacher thinks Tom is clever", "a": "Correct" },
+        { "ctx": "Tom and his sister Clare", "num": 14, "q": "Tom dislikes doing maths", "a": "Incorrect" },
+        { "ctx": "Tom and his sister Clare", "num": 15, "q": "Clare thinks it is a bad idea to take a friend’s advice", "a": "Correct" },
+        { "ctx": "Tom and his sister Clare", "num": 16, "q": "Tom finally realizes he will need his father’s agreement to his plans", "a": "Correct" },
+        { "ctx": "A boy Frank and a girl Linda", "num": 11, "q": "Linda wants to change a cassette because she dislikes it", "a": "Incorrect" },
+        { "ctx": "A boy Frank and a girl Linda", "num": 12, "q": "Linda already knows what she wants to get", "a": "Incorrect" },
+        { "ctx": "A boy Frank and a girl Linda", "num": 13, "q": "Frank recommends a famous band", "a": "Incorrect" },
+        { "ctx": "A boy Frank and a girl Linda", "num": 14, "q": "Linda is happy with her cassettle player", "a": "Correct" },
+        { "ctx": "A boy Frank and a girl Linda", "num": 15, "q": "Linda thinks the price of the casseette is reasonable", "a": "Correct" },
+        { "ctx": "A boy Frank and a girl Linda", "num": 16, "q": "Linda has already seen the Irish band", "a": "Incorrect" },
+        { "ctx": "A girl Lisa and a boy Ben", "num": 11, "q": "Lisa thinks you can enjoy a holiday without spending a lot", "a": "Correct" },
+        { "ctx": "A girl Lisa and a boy Ben", "num": 12, "q": "Ben has arranged to go on a seaside holiday", "a": "Incorrect" },
+        { "ctx": "A girl Lisa and a boy Ben", "num": 13, "q": "Lisa thinks a walking holiday is healthy", "a": "Correct" },
+        { "ctx": "A girl Lisa and a boy Ben", "num": 14, "q": "ben thinks the weather in Scotland will be fine", "a": "Incorrect" },
+        { "ctx": "A girl Lisa and a boy Ben", "num": 15, "q": "Lisa enjoys walking in hot weather", "a": "Incorrect" },
+        { "ctx": "A girl Lisa and a boy Ben", "num": 16, "q": "Lisa prefers staying in hotels", "a": "Incorrect" },
+        { "ctx": "Teenage girl called Anna and her father", "num": 11, "q": "Anna begins by asking her father to collect her from the party", "a": "Incorrect" },
+        { "ctx": "Teenage girl called Anna and her father", "num": 12, "q": "The party is to celebrate Tom’s birthday", "a": "Incorrect" },
+        { "ctx": "Teenage girl called Anna and her father", "num": 13, "q": "Some of Tom’s relation will be at the party", "a": "Correct" },
+        { "ctx": "Teenage girl called Anna and her father", "num": 14, "q": "Anna’s father is worried about her attending the party", "a": "Incorrect" },
+        { "ctx": "Teenage girl called Anna and her father", "num": 15, "q": "Anna’s father will take them to the party before the film starts", "a": "Incorrect" },
+        { "ctx": "Teenage girl called Anna and her father", "num": 16, "q": "Anna’s father insists that she leaves the party at 12:00", "a": "Correct" }
+    ],
+    "Quyển 5": [
+        { "ctx": "A boy Carl and a girl Susanna", "num": 11, "q": "Susanna feels shy about playing her violin in public", "a": "Incorrect" },
+        { "ctx": "A boy Carl and a girl Susanna", "num": 12, "q": "Carl and Susanna share the same opinion about practicing their instruments regularly", "a": "Incorrect" },
+        { "ctx": "A boy Carl and a girl Susanna", "num": 13, "q": "Susanna’s parents refuse to allow her to give up violin lessons", "a": "Correct" },
+        { "ctx": "A boy Carl and a girl Susanna", "num": 14, "q": "Carl’s aim is to have career in music", "a": "Incorrect" },
+        { "ctx": "A boy Carl and a girl Susanna", "num": 15, "q": "Susanna thinks she would enjoy working in anther country", "a": "Correct" },
+        { "ctx": "A teenage boy Alex and his sister Rose", "num": 11, "q": "Alex and Rose’s mother have gone to their Grandad’s", "a": "Incorrect" },
+        { "ctx": "A teenage boy Alex and his sister Rose", "num": 12, "q": "Alex try to persuade Rose to cook supper", "a": "Incorrect" },
+        { "ctx": "A teenage boy Alex and his sister Rose", "num": 13, "q": "Alex want to eat in an expensive restaurant", "a": "Correct" },
+        { "ctx": "A teenage boy Alex and his sister Rose", "num": 14, "q": "Alex has eaten at Classic Express before", "a": "Correct" },
+        { "ctx": "A teenage boy Alex and his sister Rose", "num": 15, "q": "Alex and Rose are going to walk to the restaurant together", "a": "Correct" },
+        { "ctx": "A student called Peter and his father", "num": 11, "q": "Peter’s mother is planning to go to Scotland", "a": "Incorrect" },
+        { "ctx": "A student called Peter and his father", "num": 12, "q": "Peter’s father hope to have an active holiday", "a": "Correct" },
+        { "ctx": "A student called Peter and his father", "num": 13, "q": "Peter’s father thinks Peter should have a holiday before starting work", "a": "Correct" },
+        { "ctx": "A student called Peter and his father", "num": 14, "q": "Peter has met Jim’s son more than one", "a": "Incorrect" },
+        { "ctx": "A student called Peter and his father", "num": 15, "q": "Peter suggests everyone could meet before the trip to Scotland", "a": "Correct" },
+        { "ctx": "A girl called Ella and her father", "num": 11, "q": "Ella and her father both think she has worked hard", "a": "Correct" },
+        { "ctx": "A girl called Ella and her father", "num": 12, "q": "Ella is happy to be alone during the holidays", "a": "Correct" },
+        { "ctx": "A girl called Ella and her father", "num": 13, "q": "Ella has a lot in common with her friends", "a": "Incorrect" },
+        { "ctx": "A girl called Ella and her father", "num": 14, "q": "The family’s last camping trip was unsuccessful", "a": "Correct" },
+        { "ctx": "A girl called Ella and her father", "num": 15, "q": "Some one has asked Elli to look after a horse in the holidays", "a": "Incorrect" },
+        { "ctx": "A girl called Ella and her father", "num": 16, "q": "Ella’s father is keen for her to spend the holidays relaxing", "a": "Incorrect" }
+    ],
+    "Quyển 6": [
+        { "ctx": "A boy Marcus and a girl Catherine", "num": 11, "q": "Catherine finds it hard to understand why Marcus has so much homework", "a": "Incorrect" },
+        { "ctx": "A boy Marcus and a girl Catherine", "num": 12, "q": "Marcus agrees that he could change his weekend activities", "a": "Incorrect" },
+        { "ctx": "A boy Marcus and a girl Catherine", "num": 13, "q": "Catherine thinks visiting a museum was a good experience for Marcus", "a": "Correct" },
+        { "ctx": "A boy Marcus and a girl Catherine", "num": 14, "q": "Catherine offers to show Marcus the maths homework she has already done", "a": "Incorrect" },
+        { "ctx": "A boy Marcus and a girl Catherine", "num": 15, "q": "Marcus worries that his teacher might be angry if Catherine helps him", "a": "Correct" },
+        { "ctx": "A boy Marcus and a girl Catherine", "num": 16, "q": "After talking to Catherine, Marucs feels more confident about his homework", "a": "Incorrect" },
+        { "ctx": "Marco and his wife Sarah", "num": 11, "q": "Sarah was expecting to enjoy the film", "a": "Incorrect" },
+        { "ctx": "Marco and his wife Sarah", "num": 12, "q": "Marco and Sarah agree that the city in the film was London", "a": "Correct" },
+        { "ctx": "Marco and his wife Sarah", "num": 13, "q": "Marco feels that the length of the film made it rather boring", "a": "Incorrect" },
+        { "ctx": "Marco and his wife Sarah", "num": 14, "q": "Sarah was upset about how some of the audience behaved during the film", "a": "Correct" },
+        { "ctx": "Marco and his wife Sarah", "num": 15, "q": "Sarah was disappointed with the way the main actor performed", "a": "Incorrect" },
+        { "ctx": "Marco and his wife Sarah", "num": 16, "q": "Marco thinks this film is the best the director has made", "a": "Incorrect" },
+        { "ctx": "Rolf and a girl Maria", "num": 11, "q": "Maria would like to travel a lot as part of her job", "a": "Correct" },
+        { "ctx": "Rolf and a girl Maria", "num": 12, "q": "Maria is confident she will be able to work for an airline", "a": "Incorrect" },
+        { "ctx": "Rolf and a girl Maria", "num": 13, "q": "Rolf intends to do a job connected with his degree", "a": "Incorrect" },
+        { "ctx": "Rolf and a girl Maria", "num": 14, "q": "Maria and Rolf agree it is important to have a good salary", "a": "Correct" },
+        { "ctx": "Rolf and a girl Maria", "num": 15, "q": "Maria hopes to work for several different employers", "a": "Incorrect" },
+        { "ctx": "Rolf and a girl Maria", "num": 16, "q": "Rolf’s ambition is to manage his own company one day", "a": "Incorrect" },
+        { "ctx": "Julia and her father", "num": 11, "q": "Julia wants to choose a course as soon as possible", "a": "Incorrect" },
+        { "ctx": "Julia and her father", "num": 12, "q": "Julia’s father thinks that studying business maybe boring", "a": "Incorrect" },
+        { "ctx": "Julia and her father", "num": 13, "q": "Julia’s father believes Julia’s friend is making the wrong choice", "a": "Correct" },
+        { "ctx": "Julia and her father", "num": 14, "q": "Julia’s father thinks she may find studying business too difficult", "a": "Incorrect" },
+        { "ctx": "Julia and her father", "num": 15, "q": "Julia is confident about her maths", "a": "Correct" },
+        { "ctx": "Julia and her father", "num": 16, "q": "Judia is keen to consider her father’s suggestion", "a": "Correct" }
+    ],
+    "Quyển 7": [
+        { "ctx": "Natasha and Colin", "num": 11, "q": "Natasha has decided to take a day off work to go running", "a": "Incorrect" },
+        { "ctx": "Natasha and Colin", "num": 12, "q": "Colin found running to work was bad for his health", "a": "Correct" },
+        { "ctx": "Natasha and Colin", "num": 13, "q": "Natasha would prefer to go running outside the city", "a": "Correct" },
+        { "ctx": "Natasha and Colin", "num": 14, "q": "Natasha would like to wear her sport clothes at work", "a": "Incorrect" },
+        { "ctx": "Natasha and Colin", "num": 15, "q": "Natasha will run in a big race because she hopes to win it", "a": "Incorrect" },
+        { "ctx": "Natasha and Colin", "num": 16, "q": "Colin and Natasha will prepare for the big race together", "a": "Incorrect" },
+        { "ctx": "Claire and Tom", "num": 11, "q": "Claire has read about the football tour in the newspaper", "a": "Incorrect" },
+        { "ctx": "Claire and Tom", "num": 12, "q": "Claire is worried about being the youngest member of the team", "a": "Incorrect" },
+        { "ctx": "Claire and Tom", "num": 13, "q": "Tom feels that schoolwork is more important than sport training", "a": "Correct" },
+        { "ctx": "Claire and Tom", "num": 14, "q": "Claire intends to study at a university next year", "a": "Incorrect" },
+        { "ctx": "Claire and Tom", "num": 15, "q": "Claire thinks it is important to win every game on the tour", "a": "Incorrect" },
+        { "ctx": "Claire and Tom", "num": 16, "q": "Tom agrees to go and support Claire’s team at her next match", "a": "Correct" },
+        { "ctx": "Sam and Carla", "num": 11, "q": "Carla is surprised that Mrs Ford wanted her to attend the meeting", "a": "Incorrect" },
+        { "ctx": "Sam and Carla", "num": 12, "q": "Sam says that last year’s concert was an improvement on earlier ones", "a": "Correct" },
+        { "ctx": "Sam and Carla", "num": 13, "q": "Carla enjoys preparing for the last years concert", "a": "Incorrect" },
+        { "ctx": "Sam and Carla", "num": 14, "q": "Sam tells Carla that she is the best pianist in the school", "a": "Incorrect" },
+        { "ctx": "Sam and Carla", "num": 15, "q": "Sam encourages Carla to accept Mrs Ford’s choice of music", "a": "Incorrect" },
+        { "ctx": "Sam and Carla", "num": 16, "q": "Sam realises that he must stop doing one of his activities", "a": "Correct" },
+        { "ctx": "Karl and his wife Jenny", "num": 11, "q": "Jenny and Karl are both pleased to be home after their holiday", "a": "Incorrect" },
+        { "ctx": "Karl and his wife Jenny", "num": 12, "q": "Jenny thinks that the weather forecast they heard for their holiday week was correct", "a": "Correct" },
+        { "ctx": "Karl and his wife Jenny", "num": 13, "q": "Jenny and Karl both liked the way their hotel served meals", "a": "Correct" },
+        { "ctx": "Karl and his wife Jenny", "num": 14, "q": "Jenny thinks that they had a better room on this holiday than last year", "a": "Incorrect" },
+        { "ctx": "Karl and his wife Jenny", "num": 15, "q": "Larl was angry about the state of the hotel sports equipment", "a": "Correct" },
+        { "ctx": "Karl and his wife Jenny", "num": 16, "q": "Jenny and Karl are both keen to plan another holiday immediately", "a": "Incorrect" }
+    ],
+    "Quyển 8": [
+        { "ctx": "Julie and Greg", "num": 11, "q": "They agree that the wildlife centre building is well designed", "a": "Incorrect" },
+        { "ctx": "Julie and Greg", "num": 12, "q": "Julie thought the sharks at the wildlife centre is frightening", "a": "Incorrect" },
+        { "ctx": "Julie and Greg", "num": 13, "q": "Julie found the building was too warm", "a": "Correct" },
+        { "ctx": "Julie and Greg", "num": 14, "q": "Greg was disappointed with the number of insects", "a": "Correct" },
+        { "ctx": "Julie and Greg", "num": 15, "q": "Greg only managed to see one tree frog", "a": "Incorrect" },
+        { "ctx": "Julie and Greg", "num": 16, "q": "Julie is very keen to return to the wildlife centre", "a": "Correct" },
+        { "ctx": "Laura and Karl", "num": 11, "q": "Karl says it’s been difficult finding somewhere to live", "a": "Incorrect" },
+        { "ctx": "Laura and Karl", "num": 12, "q": "Karl has had problems studying in another language", "a": "Incorrect" },
+        { "ctx": "Laura and Karl", "num": 13, "q": "Laure is surprised at how little work there is on her course", "a": "Incorrect" },
+        { "ctx": "Laura and Karl", "num": 14, "q": "Karl is uncertain whether to return home after his course", "a": "Correct" },
+        { "ctx": "Laura and Karl", "num": 15, "q": "Laura is missing her parents", "a": "Correct" },
+        { "ctx": "Laura and Karl", "num": 16, "q": "Laura feels that she’s too busy to visit Karl", "a": "Correct" },
+        { "ctx": "Anne and Peter", "num": 11, "q": "Peter wants to take his sister to the party", "a": "Incorrect" },
+        { "ctx": "Anne and Peter", "num": 12, "q": "Anne hopes the party will be bigger than the one last year", "a": "Incorrect" },
+        { "ctx": "Anne and Peter", "num": 13, "q": "Peter thinks that new college hall is big enough for the party", "a": "Correct" },
+        { "ctx": "Anne and Peter", "num": 14, "q": "Peter thinks DJs play a good range of music", "a": "Incorrect" },
+        { "ctx": "Anne and Peter", "num": 15, "q": "Ann hopes the college cafeteria will supply the food for the party", "a": "Incorrect" },
+        { "ctx": "Anne and Peter", "num": 16, "q": "Peter is confident the party will end after midnight", "a": "Correct" },
+        { "ctx": "Martha and James", "num": 11, "q": "They agree that the last show in the series was complicated", "a": "Incorrect" },
+        { "ctx": "Martha and James", "num": 12, "q": "James believes that the series is successful because of the main character", "a": "Incorrect" },
+        { "ctx": "Martha and James", "num": 13, "q": "They both admire the main character’s behaviour", "a": "Correct" },
+        { "ctx": "Martha and James", "num": 14, "q": "Martha thinks that the main character has similar skill to a detective", "a": "Correct" },
+        { "ctx": "Martha and James", "num": 15, "q": "James was surprised to find the mail character was so funny", "a": "Incorrect" },
+        { "ctx": "Martha and James", "num": 16, "q": "They both plan to watch the series again", "a": "Correct" }
+    ]
+};
+
+const bookKeys = Object.keys(rawData);
+let currentBookIndex = 0;
+let currentQuestions = [];
+let userScoreMap = {};
+
+document.addEventListener("DOMContentLoaded", () => {
+    renderTabs();
+    loadBook(bookKeys[0]);
+});
+
+function renderTabs() {
+    const tabsBox = document.getElementById("tabs-box");
+    tabsBox.innerHTML = "";
+    bookKeys.forEach((bookName, index) => {
+        const btn = document.createElement("button");
+        btn.className = `tab-btn ${index === currentBookIndex ? 'active' : ''}`;
+        btn.innerText = bookName;
+        btn.onclick = () => {
+            currentBookIndex = index;
+            loadBook(bookName);
+        };
+        tabsBox.appendChild(btn);
+    });
+}
+
+function loadBook(bookName) {
+    document.getElementById("current-book-title").innerText = bookName;
+    
+    const tabs = document.querySelectorAll(".tab-btn");
+    tabs.forEach((tab, idx) => {
+        if (idx === currentBookIndex) tab.classList.add("active");
+        else tab.classList.remove("active");
+    });
+
+    currentQuestions = JSON.parse(JSON.stringify(rawData[bookName]));
+    
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+}
+
+function renderQuestions() {
+    const quizBox = document.getElementById("quiz-box");
+    quizBox.innerHTML = "";
+
+    let lastContext = "";
+
+    currentQuestions.forEach((qObj, qIndex) => {
+        if (qObj.ctx && qObj.ctx !== lastContext) {
+            const ctxDiv = document.createElement("div");
+            ctxDiv.className = "context-header";
+            ctxDiv.innerText = `🎧 Context: ${qObj.ctx}`;
+            quizBox.appendChild(ctxDiv);
+            lastContext = qObj.ctx;
+        }
+
+        const card = document.createElement("div");
+        card.className = "question-card";
+        card.id = `q-card-${qIndex}`;
+
+        const qText = document.createElement("div");
+        qText.className = "question-text";
+        qText.innerText = `Câu ${qObj.num}: ${qObj.q}`;
+        card.appendChild(qText);
+
+        const optionsGrid = document.createElement("div");
+        optionsGrid.className = "options-grid";
+
+        const options = ["Correct", "Incorrect"];
+        options.forEach(optionText => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = optionText;
+            
+            btn.onclick = () => checkAnswer(btn, optionText, qObj.a, qIndex, optionsGrid);
+            optionsGrid.appendChild(btn);
+        });
+
+        card.appendChild(optionsGrid);
+        quizBox.appendChild(card);
+    });
+}
+
+function checkAnswer(selectedBtn, selectedText, correctAnswer, qIndex, optionsGrid) {
+    const allButtons = optionsGrid.querySelectorAll(".option-btn");
+    allButtons.forEach(btn => btn.disabled = true);
+
+    if (selectedText.toLowerCase() === correctAnswer.toLowerCase()) {
+        selectedBtn.classList.add("correct");
+        userScoreMap[qIndex] = true;
+    } else {
+        selectedBtn.classList.add("wrong");
+        userScoreMap[qIndex] = false;
+        
+        allButtons.forEach(btn => {
+            if (btn.innerText.toLowerCase() === correctAnswer.toLowerCase()) {
+                btn.classList.add("correct");
+            }
+        });
+    }
+
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const total = currentQuestions.length;
+    if (total === 0) return;
+
+    const correctCount = Object.values(userScoreMap).filter(val => val === true).length;
+    const percentage = (correctCount / total) * 100;
+
+    const progressBar = document.getElementById("progress-bar");
+    const progressText = document.getElementById("progress-text");
+    const btnNext = document.getElementById("btn-next");
+
+    progressBar.style.width = `${percentage}%`;
+    progressText.innerText = `${correctCount}/${total} ĐÚNG`;
+
+    if (correctCount === total) {
+        btnNext.style.display = "block";
+    } else {
+        btnNext.style.display = "none";
+    }
+}
+
+function shuffleCurrentBook() {
+    currentQuestions.sort(() => Math.random() - 0.5);
+    
+    userScoreMap = {};
+    currentQuestions.forEach((_, idx) => { userScoreMap[idx] = false; });
+
+    renderQuestions();
+    updateProgressBar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goToNextBook() {
+    if (currentBookIndex < bookKeys.length - 1) {
+        currentBookIndex++;
+        loadBook(bookKeys[currentBookIndex]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        alert("Chúc mừng bạn! Bạn đã xuất sắc vượt qua toàn bộ Part 4 của các quyển bài tập PET!");
+    }
+}
+</script>
+
+</body>
+</html>
