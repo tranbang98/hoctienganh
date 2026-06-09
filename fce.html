@@ -561,6 +561,40 @@ function goToNextBook() {
     }
 }
 </script>
-
+<!-- CHÈN ĐOẠN NÀY VÀO NGAY TRÊN THẺ </body> Ở CUỐI FILE INDEX.HTML -->
+<div id="nav-floating-menu" style="
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    border: 2px solid #2c3e50;
+    max-width: 280px;
+    font-family: 'Segoe UI', sans-serif;
+">
+    <div style="font-weight: bold; font-size: 0.95rem; margin-bottom: 10px; color: #2c3e50; text-align: center; border-bottom: 1px solid #eee; padding-bottom: 5px;">
+        🎯 CHUYỂN NHANH BÀI TẬP
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+        <a href="index.html" style="display: block; padding: 8px 12px; background: #e3effd; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #4a90e2;">
+            📘 PET - Part 1 (Câu 1-5)
+        </a>
+        <a href="part2.html" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #4a90e2; transition: 0.2s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+            🎯 PET - Part 2 (Câu 6-10)
+        </a>
+        <a href="part4.html" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #1abc9c; transition: 0.2s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+            ✅ PET - Part 4 (Câu 11-16)
+        </a>
+        <a href="fce.html" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #e67e22; transition: 0.2s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+            🎧 FCE - Part 1 (Câu 16-20)
+        </a>
+        <a href="fce-part3.html" style="display: block; padding: 8px 12px; background: #f8f9fa; color: #1a1a1a; text-decoration: none; font-size: 0.85rem; font-weight: 600; border-radius: 6px; border-left: 4px solid #8e44ad; transition: 0.2s;" onmouseover="this.style.background='#eee'" onmouseout="this.style.background='#f8f9fa'">
+            🚀 FCE - Part 3 (Câu 21-25)
+        </a>
+    </div>
+</div>
 </body>
 </html>
